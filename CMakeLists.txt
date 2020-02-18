@@ -33,6 +33,7 @@ set(TEST_SOURCES
 	test/string_parser.cpp
 	test/int_parser.cpp
 	test/uint_parser.cpp
+	test/double_parser.cpp
 )
 
 set(CATCH_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/catch)

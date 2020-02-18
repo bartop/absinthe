@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <utility>
 #include <optional>
@@ -13,7 +14,7 @@ public:
     std::pair<std::string::const_iterator, std::tuple<std::optional<unsigned>>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
-        auto result = 0;
+        unsigned result = 0;
         auto it = begin;
 
         for (; it != end; ++it)
