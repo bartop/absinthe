@@ -2,6 +2,15 @@
 
 set -e
 
-mkdir -p build
+if [[ -d build ]] 
+then
+    mkdir -p build
+    cd build
+    cmake ..
+    cd ..
+fi
+
 cd build
-cmake ..
+
+make -j4
+make test
