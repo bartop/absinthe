@@ -1,14 +1,14 @@
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
-#include <absynth/int_parser.hpp>
+#include <absynth/uint_parser.hpp>
 #include <absynth/parse.hpp>
 
 #include <string>
 
-TEST_CASE("any int parser", "")
+TEST_CASE("unsigned int parser", "")
 {
-    auto any_int_parser = absynth::int_();
+    auto uint_parser = absynth::uint_();
 
     SECTION("parsing successful when input string matches a number")
     {
@@ -20,23 +20,18 @@ TEST_CASE("any int parser", "")
             expected = 314;
             parser_input = std::to_string(expected);
         }
-        SECTION("input string has leading +")
+        SECTION("input string has leading zeros")
         {
             expected = 314;
-            parser_input = "+" + std::to_string(expected);
-        }
-        SECTION("expected number is negative")
-        {
-            expected = -314;
-            parser_input = std::to_string(expected);
+            parser_input = "000" + std::to_string(expected);
         }
         SECTION("longer input string sucessfully matched")
         {
             expected = 314;
-            parser_input = "+" + std::to_string(expected) + "abc";
+            parser_input = std::to_string(expected) + "abc";
         }
 
-        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), any_int_parser);
+        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), uint_parser);
         REQUIRE(result != parser_input.begin());
         REQUIRE(std::get<0>(parsed) == expected);
     }
@@ -44,7 +39,7 @@ TEST_CASE("any int parser", "")
     SECTION("parsing fails when input string does not match a number")
     {
         std::string parser_input = "bac3";
-        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), any_int_parser);
+        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), uint_parser);
         REQUIRE(result == parser_input.begin());
         REQUIRE(std::get<0>(parsed) == std::nullopt);
     }
@@ -52,7 +47,7 @@ TEST_CASE("any int parser", "")
     SECTION("parsing fails when input string is empty")
     {
         std::string parser_input;
-        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), any_int_parser);
+        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), uint_parser);
         REQUIRE(result == parser_input.begin());
         REQUIRE(std::get<0>(parsed) == std::nullopt);
     }
