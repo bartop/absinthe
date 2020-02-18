@@ -1,3 +1,6 @@
+#pragma once
+
+#include "uint_parser.hpp"
 
 #include <tuple>
 #include <string>
@@ -7,9 +10,17 @@
 
 namespace absynth
 {
+inline int parse_sign(std::string::const_iterator &begin);
+
 
 class int_
 {
+    std::pair<std::string::const_iterator, std::tuple<std::optional<unsigned>>>
+    parse_unsigned(std::string::const_iterator begin, std::string::const_iterator end) const
+    {
+        return uint_().parse(begin, end);
+    }
+
 public:
     std::pair<std::string::const_iterator, std::tuple<std::optional<int>>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
@@ -17,30 +28,22 @@ public:
         if (begin == end)
             return {begin, std::nullopt};
 
-        int sign = [&begin](){
-            if (*begin != '-' && *begin != '+')
-                return 1;
+        int sign = parse_sign(begin);
 
-            return *begin++ == '+' ? 1 : -1;
-        }();
-
-        auto result = 0;
-        auto it = begin;
-
-        for (; it != end; ++it)
-        {
-            if (*it < '0' || *it > '9')
-                break;
-
-            result *= 10;
-            result += *it - '0';
-        }
-
-        if (it == begin)
-            return {begin, std::nullopt};
-
-        return {it, sign * result};
+        auto [it, uint_result] = parse_unsigned(begin, end);
+        if (auto abs_value = std::get<0>(uint_result))
+            return { it, *abs_value * sign};
+        else
+            return { begin, std::nullopt };
     }
 };
+
+int parse_sign(std::string::const_iterator &begin)
+{
+    if (*begin != '-' && *begin != '+')
+        return 1;
+
+    return *begin++ == '+' ? 1 : -1;
+}
 
 } // namespace absynth
