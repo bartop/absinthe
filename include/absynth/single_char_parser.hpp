@@ -14,7 +14,7 @@ public:
     {
     }
 
-    std::pair<std::string::const_iterator, std::tuple<std::optional<char>>>
+    std::pair<std::string::const_iterator, std::optional<std::tuple<char>>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         if (begin == end || *begin != m_parsed_char)

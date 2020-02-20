@@ -15,14 +15,14 @@ inline int parse_sign(std::string::const_iterator &begin);
 
 class int_
 {
-    std::pair<std::string::const_iterator, std::tuple<std::optional<unsigned>>>
+    std::pair<std::string::const_iterator, std::optional<std::tuple<unsigned>>>
     parse_unsigned(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         return uint_().parse(begin, end);
     }
 
 public:
-    std::pair<std::string::const_iterator, std::tuple<std::optional<int>>>
+    std::pair<std::string::const_iterator, std::optional<std::tuple<int>>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         if (begin == end)
@@ -31,8 +31,8 @@ public:
         int sign = parse_sign(begin);
 
         auto [it, uint_result] = parse_unsigned(begin, end);
-        if (auto abs_value = std::get<0>(uint_result))
-            return { it, *abs_value * sign};
+        if (uint_result)
+            return { it, std::get<0>(*uint_result) * sign};
         else
             return { begin, std::nullopt };
     }

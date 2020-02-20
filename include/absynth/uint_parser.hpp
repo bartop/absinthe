@@ -11,7 +11,7 @@ namespace absynth
 class uint_
 {
 public:
-    std::pair<std::string::const_iterator, std::tuple<std::optional<unsigned>>>
+    std::pair<std::string::const_iterator, std::optional<std::tuple<unsigned>>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         unsigned result = 0;

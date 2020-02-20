@@ -16,7 +16,7 @@ TEST_CASE("string literal parser", "")
 		std::string parseme = "abc";
 		auto [result, parsed] = absynth::parse(parseme.begin(), parseme.end(), string_parser);
 		REQUIRE(result == parseme.end());
-		REQUIRE(std::get<0>(parsed) == "abc");
+		REQUIRE(std::get<0>(*parsed) == "abc");
 	}
 	
 	SECTION("parser does not match input string")
@@ -24,7 +24,7 @@ TEST_CASE("string literal parser", "")
 		std::string parseme = "bac";
 		auto [result, parsed] = absynth::parse(parseme.begin(), parseme.end(), string_parser);
 		REQUIRE(result == parseme.begin());
-		REQUIRE(std::get<0>(parsed) == std::nullopt);
+		REQUIRE(parsed == std::nullopt);
 	}
 
 	SECTION("parser fails to parse empty input string")
@@ -32,14 +32,14 @@ TEST_CASE("string literal parser", "")
 		std::string parseme;
 		auto [result, parsed] = absynth::parse(parseme.begin(), parseme.end(), string_parser);
 		REQUIRE(result == parseme.begin());
-		REQUIRE(std::get<0>(parsed) == std::nullopt);
+		REQUIRE(parsed == std::nullopt);
 	}
 
 	SECTION("longer input string sucessfully matched")
 	{
 		std::string parseme = "abcccdsds";
 		auto [result, parsed] = absynth::parse(parseme.begin(), parseme.end(), string_parser);
-		REQUIRE(result == parseme.begin() + std::get<0>(parsed)->size());
-		REQUIRE(std::get<0>(parsed) == "abc");
+		REQUIRE(result == parseme.begin() + std::get<0>(*parsed).size());
+		REQUIRE(std::get<0>(*parsed) == "abc");
 	}	
 }

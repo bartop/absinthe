@@ -47,7 +47,7 @@ TEST_CASE("any int parser", "")
 
         auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), any_int_parser);
         REQUIRE(result != parser_input.begin());
-        REQUIRE(std::get<0>(parsed) == Approx(expected));
+        REQUIRE(std::get<0>(*parsed) == Approx(expected));
     }
 
     SECTION("parsing fails when input string does not match a number")
@@ -55,7 +55,7 @@ TEST_CASE("any int parser", "")
         std::string parser_input = "bac3.12";
         auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), any_int_parser);
         REQUIRE(result == parser_input.begin());
-        REQUIRE(std::get<0>(parsed) == std::nullopt);
+        REQUIRE(parsed == std::nullopt);
     }
 
     SECTION("parsing fails when input string is empty")
@@ -63,6 +63,6 @@ TEST_CASE("any int parser", "")
         std::string parser_input;
         auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), any_int_parser);
         REQUIRE(result == parser_input.begin());
-        REQUIRE(std::get<0>(parsed) == std::nullopt);
+        REQUIRE(parsed == std::nullopt);
     }
 }
