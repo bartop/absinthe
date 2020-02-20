@@ -10,24 +10,34 @@
 
 TEST_CASE("sequence parser", "")
 {
+    auto sequence_parser = absynth::make_sequence(absynth::string_("double: "), absynth::double_());
+
     SECTION("parsing successful")
     {
-        std::string parser_input = "double: 3.14";
-        auto sequence_parser = absynth::make_sequence(absynth::string_("double: "), absynth::double_());
+        std::string parser_input = GENERATE("double: 3.14", "double: 3.14 5 asd", "double: 3.14aaa");
+        auto [result_it, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), sequence_parser);
 
-        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), sequence_parser);
-        REQUIRE(result != parser_input.begin());
-        (void) parsed;
-        // REQUIRE(std::get<0>(parsed) == Approx(expected));
+        REQUIRE(result_it != parser_input.begin());
+        REQUIRE(std::get<0>(*parsed) == "double: ");
+        REQUIRE(std::get<1>(*parsed) == Approx(3.14));
     }
 
     SECTION("parsing fails when input string is empty")
     {
         std::string parser_input;
-        auto sequence_parser = absynth::make_sequence(absynth::string_("double: "), absynth::double_());
         auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), sequence_parser);
+
         REQUIRE(result == parser_input.begin());
-        (void) parsed;
-        // REQUIRE(std::get<0>(parsed) == std::nullopt);
+        REQUIRE(parsed == std::nullopt);
     }
+
+    SECTION("parsing fails when input string matches only a part of declared pattern")
+    {
+        std::string parser_input = "double: ";
+        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), sequence_parser);
+
+        REQUIRE(result == parser_input.begin());
+        REQUIRE(parsed == std::nullopt);
+    }
+
 }
