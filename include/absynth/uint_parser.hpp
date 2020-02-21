@@ -2,8 +2,7 @@
 
 #include <string>
 #include <utility>
-#include <optional>
-#include <tuple>
+#include <variant>
 
 namespace absynth
 {
@@ -11,7 +10,7 @@ namespace absynth
 class uint_
 {
 public:
-    std::pair<std::string::const_iterator, std::optional<std::tuple<unsigned>>>
+    std::pair<std::string::const_iterator, std::variant<std::string, unsigned>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         unsigned result = 0;
@@ -27,9 +26,9 @@ public:
         }
 
         if (it == begin)
-            return {begin, std::nullopt};
+            return {begin, "error"};
 
-        return {it, result};
+    return {it, result};
     }
 };
 } // namespace absynth

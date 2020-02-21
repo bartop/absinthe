@@ -2,9 +2,8 @@
 
 #include "uint_parser.hpp"
 
-#include <tuple>
+#include <variant>
 #include <string>
-#include <optional>
 #include <utility>
 #include <algorithm>
 
@@ -15,26 +14,27 @@ inline int parse_sign(std::string::const_iterator &begin);
 
 class int_
 {
-    std::pair<std::string::const_iterator, std::optional<std::tuple<unsigned>>>
+    std::pair<std::string::const_iterator, std::variant<std::string, unsigned>>
     parse_unsigned(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         return uint_().parse(begin, end);
     }
 
 public:
-    std::pair<std::string::const_iterator, std::optional<std::tuple<int>>>
+    std::pair<std::string::const_iterator, std::variant<std::string, int>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         if (begin == end)
-            return {begin, std::nullopt};
+            return {begin, "error"};
 
         int sign = parse_sign(begin);
 
-        auto [it, uint_result] = parse_unsigned(begin, end);
+        auto [it, result_variant] = parse_unsigned(begin, end);
+        auto uint_result = std::get_if<1>(&result_variant);
         if (uint_result)
-            return { it, std::get<0>(*uint_result) * sign};
+            return { it, *uint_result * sign};
         else
-            return { begin, std::nullopt };
+            return { begin, "error" };
     }
 };
 

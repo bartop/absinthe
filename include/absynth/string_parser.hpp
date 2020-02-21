@@ -2,7 +2,7 @@
 
 #include <tuple>
 #include <string>
-#include <optional>
+#include <variant>
 #include <utility>
 #include <algorithm>
 
@@ -16,7 +16,7 @@ public:
     {
     }
 
-    std::pair<std::string::const_iterator, std::optional<std::tuple<std::string>>>
+    std::pair<std::string::const_iterator, std::variant<std::string, std::string>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         auto [parsed_it, input_it] = std::mismatch(
@@ -24,9 +24,9 @@ public:
             begin, end);
 
         if (parsed_it != m_parsed_string.end())
-            return {begin, std::nullopt};
+            return {begin, std::variant<std::string, std::string>(std::in_place_index<0>, "error") };
 
-        return {input_it, m_parsed_string};
+        return {input_it, std::variant<std::string, std::string>(std::in_place_index<1>, m_parsed_string) };
     }
 
 private:

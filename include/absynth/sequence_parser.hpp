@@ -1,22 +1,15 @@
 #pragma once
 
 #include "uint_parser.hpp"
+#include "traits.hpp"
 
-#include <tuple>
 #include <string>
-#include <optional>
+#include <variant>
 #include <utility>
 #include <algorithm>
 
 namespace absynth
 {
-
-template<class Parser>
-using parser_tuple_t = 
-    typename decltype(
-        std::declval<Parser>().parse(std::string::const_iterator{}, std::string::const_iterator{})
-    )::second_type::value_type;
-
 
 template<class Left, class Right>
 class sequence
@@ -29,22 +22,24 @@ public:
         {}
 
     using tuple_t = decltype(std::tuple_cat(
-        std::declval<parser_tuple_t<Left>>(), 
-        std::declval<parser_tuple_t<Right>>()
+        std::declval<decltype(tuplize(std::declval<parser_result_t<Left>>()))>(), 
+        std::declval<decltype(tuplize(std::declval<parser_result_t<Right>>()))>() 
     ));
 
-    std::pair<std::string::const_iterator, std::optional<tuple_t>>
+    std::pair<std::string::const_iterator, std::variant<std::string, tuple_t>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
-        auto [first_it, first_result] = m_left_parser.parse(begin, end);
+        auto [first_it, first_result_variant] = m_left_parser.parse(begin, end);
+        auto first_result = std::get_if<1>(&first_result_variant);
         if (!first_result) 
-            return {begin, std::nullopt };
+            return {begin, "error" };
 
-        auto [second_it, second_result] = m_right_parser.parse(first_it, end);
+        auto [second_it, second_result_variant] = m_right_parser.parse(first_it, end);
+        auto second_result = std::get_if<1>(&second_result_variant);
         if (!second_result)
-            return {begin, std::nullopt };
+            return {begin, "error" };
 
-        return { second_it, std::tuple_cat(*first_result, *second_result) };
+        return { second_it, std::tuple_cat( tuplize(*first_result), tuplize(*second_result) ) };
     }
 
 private:

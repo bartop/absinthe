@@ -1,8 +1,7 @@
 #pragma once
 
-#include <tuple>
 #include <string>
-#include <optional>
+#include <variant>
 
 namespace absynth
 {
@@ -14,11 +13,11 @@ public:
     {
     }
 
-    std::pair<std::string::const_iterator, std::optional<std::tuple<char>>>
+    std::pair<std::string::const_iterator, std::variant<std::string, char>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         if (begin == end || *begin != m_parsed_char)
-            return { begin, std::nullopt };
+            return { begin, "error" };
 
         return { ++begin, m_parsed_char };
     }
