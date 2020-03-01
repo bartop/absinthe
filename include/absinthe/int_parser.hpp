@@ -7,7 +7,7 @@
 #include <utility>
 #include <algorithm>
 
-namespace absynth
+namespace absinthe
 {
 inline int parse_sign(std::string::const_iterator &begin);
 
@@ -46,4 +46,4 @@ int parse_sign(std::string::const_iterator &begin)
     return *begin++ == '+' ? 1 : -1;
 }
 
-} // namespace absynth
+} // namespace absinthe

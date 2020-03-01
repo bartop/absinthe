@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace absynth
+namespace absinthe
 {
 
 template <class Parser>
@@ -14,4 +14,4 @@ auto parse(
     return parser.parse(it, end);
 }
 
-} // namespace absynth
+} // namespace absinthe

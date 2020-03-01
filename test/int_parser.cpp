@@ -1,14 +1,14 @@
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
-#include <absynth/int_parser.hpp>
-#include <absynth/parse.hpp>
+#include <absinthe/int_parser.hpp>
+#include <absinthe/parse.hpp>
 
 #include <string>
 
 TEST_CASE("any int parser", "")
 {
-    auto any_int_parser = absynth::int_();
+    auto any_int_parser = absinthe::int_();
 
     SECTION("parsing successful when input string matches a number")
     {
@@ -36,7 +36,7 @@ TEST_CASE("any int parser", "")
             parser_input = "+" + std::to_string(expected) + "abc";
         }
 
-        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), any_int_parser);
+        auto [result, parsed] = absinthe::parse(parser_input.begin(), parser_input.end(), any_int_parser);
         REQUIRE(result != parser_input.begin());
         REQUIRE(std::get<1>(parsed) == expected);
     }
@@ -45,7 +45,7 @@ TEST_CASE("any int parser", "")
     {
         std::string parser_input = "bac3";
         
-        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), any_int_parser);
+        auto [result, parsed] = absinthe::parse(parser_input.begin(), parser_input.end(), any_int_parser);
         REQUIRE(result == parser_input.begin());
         
         auto error = std::get_if<0>(&parsed);
@@ -56,7 +56,7 @@ TEST_CASE("any int parser", "")
     {
         std::string parser_input;
 
-        auto [result, parsed] = absynth::parse(parser_input.begin(), parser_input.end(), any_int_parser);
+        auto [result, parsed] = absinthe::parse(parser_input.begin(), parser_input.end(), any_int_parser);
         REQUIRE(result == parser_input.begin());
         
         auto error = std::get_if<0>(&parsed);

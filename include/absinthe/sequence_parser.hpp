@@ -1,6 +1,5 @@
 #pragma once
 
-#include "uint_parser.hpp"
 #include "traits.hpp"
 
 #include <string>
@@ -8,7 +7,7 @@
 #include <utility>
 #include <algorithm>
 
-namespace absynth
+namespace absinthe
 {
 
 template<class Left, class Right>
@@ -55,4 +54,4 @@ auto make_sequence(Left&& left, Right&& right) {
     );
 }
 
-} // namespace absynth
+} // namespace absinthe

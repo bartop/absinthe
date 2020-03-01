@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-namespace absynth
+namespace absinthe
 {
 template <class Parser>
 class repeated
@@ -55,4 +55,4 @@ private:
         return i >= m_max_times && m_max_times != -1;
     }
 };
-} // namespace absynth
+} // namespace absinthe
