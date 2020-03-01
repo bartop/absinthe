@@ -4,7 +4,7 @@
 #include <utility>
 #include <variant>
 
-namespace absynth
+namespace absinthe
 {
 
 class uint_
@@ -31,4 +31,4 @@ public:
     return {it, result};
     }
 };
-} // namespace absynth
+} // namespace absinthe

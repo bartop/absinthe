@@ -3,7 +3,7 @@
 #include <string>
 #include <variant>
 
-namespace absynth
+namespace absinthe
 {
 
 class char_
@@ -26,4 +26,4 @@ private:
     char m_parsed_char;
 };
 
-} // namespace absynth
+} // namespace absinthe

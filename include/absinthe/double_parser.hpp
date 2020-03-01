@@ -8,7 +8,7 @@
 #include <utility>
 #include <algorithm>
 
-namespace absynth
+namespace absinthe
 {
 
 class double_
@@ -53,4 +53,4 @@ public:
     }
 };
 
-} // namespace absynth
+} // namespace absinthe

@@ -4,7 +4,7 @@
 #include <tuple>
 #include <type_traits>
 
-namespace absynth
+namespace absinthe
 {
 
 

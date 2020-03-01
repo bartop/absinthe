@@ -6,7 +6,7 @@
 #include <utility>
 #include <algorithm>
 
-namespace absynth
+namespace absinthe
 {
 
 class string_
@@ -33,4 +33,4 @@ private:
     std::string m_parsed_string;
 };
 
-} // namespace absynth
+} // namespace absinthe
