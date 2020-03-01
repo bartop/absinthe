@@ -37,8 +37,8 @@ TEST_CASE("sequence parser", "")
         std::string parser_input = "double: ";
         auto [result, parsed] = absinthe::parse(parser_input.begin(), parser_input.end(), sequence_parser);
 
-        REQUIRE(result == parser_input.begin());
-    auto error = std::get_if<std::string>(&parsed);
+	REQUIRE(result == parser_input.begin());
+	auto error = std::get_if<std::string>(&parsed);
         REQUIRE(error != nullptr);
         }
 
