@@ -7,7 +7,6 @@
 namespace absinthe
 {
 
-
 template<class Parser>
 using parser_tuple_t = 
     typename decltype(
@@ -76,6 +75,5 @@ constexpr decltype(auto) tuplize(T&& value)
     
     return std::tuple(std::forward<T>(value));
 }
-
 
 }

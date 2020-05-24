@@ -38,7 +38,7 @@ public:
         if (!second_result)
             return {begin, "error" };
 
-        return { second_it, std::tuple_cat( tuplize(*first_result), tuplize(*second_result) ) };
+        return { second_it, std::tuple_cat(tuplize(*first_result), tuplize(*second_result)) };
     }
 
 private:
@@ -54,4 +54,4 @@ auto make_sequence(Left&& left, Right&& right) {
     );
 }
 
-} // namespace absinthe
+}
