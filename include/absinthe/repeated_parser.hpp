@@ -7,17 +7,18 @@
 
 namespace absinthe
 {
+
 template <class Parser>
 class repeated
 {
-
 public:
     using result_t = std::vector<parser_result_t<Parser>>;
 
     template <class T>
-    repeated(T &&parser, int min_times = 0, int max_times = -1) : m_parser(std::forward<T>(parser)),
-                                                                  m_min_times(min_times),
-                                                                  m_max_times(max_times)
+    constexpr repeated(T &&parser, int min_times = 0, int max_times = -1) :
+        m_parser(std::forward<T>(parser)),
+        m_min_times(min_times),
+        m_max_times(max_times)
     {
     }
 
@@ -55,4 +56,21 @@ private:
         return i >= m_max_times && m_max_times != -1;
     }
 };
-} // namespace absinthe
+
+template<class Parser>
+constexpr auto make_repeated(Parser&& parser, int min_times, int max_times) 
+{
+    return repeated<std::decay_t<Parser>>(
+        std::forward<Parser>(parser),
+        min_times,
+        max_times
+    );
+}
+
+template<class Parser>
+constexpr auto operator!(Parser&& parser)
+{
+    return repeated<std::decay_t<Parser>>(std::forward<Parser>(parser), 0, 1);
+}
+
+}

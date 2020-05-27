@@ -47,8 +47,18 @@ private:
 };
 
 template<class Left, class Right>
-auto make_sequence(Left&& left, Right&& right) {
+auto make_sequence(Left&& left, Right&& right) 
+{
     return sequence<std::decay_t<Left>, std::decay_t<Right>>(
+        std::forward<Left>(left),
+        std::forward<Right>(right)
+    );
+}
+
+template<class Left, class Right>
+auto operator>>(Left&& left, Right&& right)
+{
+    return make_sequence(
         std::forward<Left>(left),
         std::forward<Right>(right)
     );

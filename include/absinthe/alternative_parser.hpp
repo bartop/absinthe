@@ -54,8 +54,18 @@ private:
 };
 
 template<class Left, class Right>
-auto make_alternative(Left&& left, Right&& right) {
+auto make_alternative(Left&& left, Right&& right) 
+{
     return alternative<std::decay_t<Left>, std::decay_t<Right>>(
+        std::forward<Left>(left),
+        std::forward<Right>(right)
+    );
+}
+
+template<class Left, class Right>
+auto operator|(Left&& left, Right&& right) 
+{
+    return make_alternative(
         std::forward<Left>(left),
         std::forward<Right>(right)
     );
