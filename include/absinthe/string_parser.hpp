@@ -33,4 +33,4 @@ private:
     std::string m_parsed_string;
 };
 
-} // namespace absinthe
+}
