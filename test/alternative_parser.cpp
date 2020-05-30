@@ -25,7 +25,7 @@ TEST_CASE("alternative parser", "string | int")
         REQUIRE(result_it != parser_input.begin());
         auto value = std::get_if<1>(&parsed);
         REQUIRE(value != nullptr);
-        REQUIRE(std::get_if<std::string>(value));
+        REQUIRE(std::get_if<std::tuple<>>(value));
     }
 
     SECTION("parsing successful for second alternative")

@@ -32,8 +32,7 @@ private:
 };
 
 template<class T>
-auto make_omit(T&& parser)
-{
+auto omit(T&& parser) {
     return omitting_parser<std::decay_t<T>>(std::forward<T>(parser));
 }
 

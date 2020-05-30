@@ -13,10 +13,9 @@ class string_
 {
 public:
     string_(std::string parsed) : m_parsed_string(std::move(parsed))
-    {
-    }
+    { }
 
-    std::pair<std::string::const_iterator, std::variant<std::string, std::string>>
+    std::pair<std::string::const_iterator, std::variant<std::string, std::tuple<>>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         auto [parsed_it, input_it] = std::mismatch(
@@ -24,9 +23,9 @@ public:
             begin, end);
 
         if (parsed_it != m_parsed_string.end())
-            return {begin, std::variant<std::string, std::string>(std::in_place_index<0>, "error") };
+            return {begin, "error" };
 
-        return {input_it, std::variant<std::string, std::string>(std::in_place_index<1>, m_parsed_string) };
+        return {input_it, std::tuple<>{} };
     }
 
 private:

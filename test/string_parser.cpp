@@ -16,7 +16,7 @@ TEST_CASE("string literal parser", "")
 		std::string parseme = "abc";
 		auto [result, parsed] = absinthe::parse(parseme.begin(), parseme.end(), string_parser);
 		REQUIRE(result == parseme.end());
-		REQUIRE(std::get<1>(parsed) == "abc");
+		REQUIRE(std::get<1>(parsed) == std::tuple<>{});
 	}
 	
 	SECTION("parser does not match input string")
@@ -35,11 +35,12 @@ TEST_CASE("string literal parser", "")
 		REQUIRE(std::get<0>(parsed) == "error");
 	}
 
-	SECTION("longer input string sucessfully matched")
+	SECTION("longer input string sucessfully matches")
 	{
 		std::string parseme = "abcccdsds";
 		auto [result, parsed] = absinthe::parse(parseme.begin(), parseme.end(), string_parser);
-		REQUIRE(result == parseme.begin() + std::get<1>(parsed).size());
-		REQUIRE(std::get<1>(parsed) == "abc");
+		REQUIRE(result != parseme.begin());
+		REQUIRE(result != parseme.end());
+		REQUIRE(std::get<1>(parsed) == std::tuple<>{});
 	}	
 }

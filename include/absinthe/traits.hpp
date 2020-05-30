@@ -70,10 +70,10 @@ using variantized_t = decltype(variantize(std::declval<T>()));
 template<class T>
 constexpr decltype(auto) tuplize(T&& value)
 {
-    if constexpr (is_tuple<T>::value)
+    if constexpr (is_tuple<std::decay_t<T>>::value)
         return std::forward<T>(value);
-    
-    return std::tuple(std::forward<T>(value));
+    else
+        return std::tuple(std::forward<T>(value));
 }
 
 }

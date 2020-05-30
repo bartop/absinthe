@@ -10,10 +10,10 @@
 
 TEST_CASE("omit parser", "")
 {
-    using absinthe::make_omit;
+    using absinthe::omit;
     using absinthe::string_;
 
-    auto parser = make_omit(string_("string"));
+    auto parser = omit(string_("string"));
 
     SECTION("parsing successful for matching input and result value is empty tuple")
     {

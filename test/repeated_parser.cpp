@@ -22,38 +22,38 @@ TEST_CASE("repeated parser", "")
     {
         auto parser = make_repeated(string_("abc"), 0, 3);
 
-        std::vector<std::string> expected_result = GENERATE(
+        std::vector<std::string> input = GENERATE(
             std::vector<std::string>{3, "abc"},
             std::vector<std::string>{2, "abc"},
             std::vector<std::string>{1, "abc"},
             std::vector<std::string>{}
         );
 
-        std::string input_string = concat_vector(expected_result);
+        std::string input_string = concat_vector(input);
         
         auto [result_it, parsing_result] = parser.parse(input_string.begin(), input_string.end());
         auto actual = std::get<1>(parsing_result);
         
         (void) result_it;
-        REQUIRE(expected_result == actual);
+        REQUIRE(std::vector<std::tuple<>>(input.size()) == actual);
     }
 
     SECTION("reapeted parser works as optional parser")
     {
         auto parser = !string_("abc");
 
-        std::vector<std::string> expected_result = GENERATE(
+        std::vector<std::string> input = GENERATE(
             std::vector<std::string>{1, "abc"},
             std::vector<std::string>{}
         );
 
-        std::string input_string = concat_vector(expected_result);
+        std::string input_string = concat_vector(input);
         
         auto [result_it, parsing_result] = parser.parse(input_string.begin(), input_string.end());
         auto actual = std::get<1>(parsing_result);
         
         (void) result_it;
-        REQUIRE(expected_result == actual);
+        REQUIRE(std::vector<std::tuple<>>(input.size()) == actual);
     }
 
     SECTION("parsing fails when matched too few repeated values")

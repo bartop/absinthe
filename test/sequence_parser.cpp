@@ -26,7 +26,6 @@ TEST_CASE("sequence parser", "")
         );
 
         REQUIRE(result_it != parser_input.begin());
-        REQUIRE(std::get<std::string>(std::get<1>(parsed)) == "double: ");
         REQUIRE(std::get<double>(std::get<1>(parsed)) == Approx(3.14));
     }
 
