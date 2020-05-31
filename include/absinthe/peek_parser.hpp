@@ -15,7 +15,7 @@ class peek
 {
 public:
     template<class T>
-    peek(T&& parser) : m_parser(std::forward<T>(parser)) {}
+    constexpr peek(T&& parser) : m_parser(std::forward<T>(parser)) {}
 
     using result_t = parser_result_t<Parser>;
 

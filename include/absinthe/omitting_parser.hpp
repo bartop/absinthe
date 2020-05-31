@@ -15,7 +15,7 @@ class omit
 {
 public:
     template<class T>
-    omit(T&& parser) : m_parser(std::forward<T>(parser)) {}
+    constexpr omit(T&& parser) : m_parser(std::forward<T>(parser)) {}
 
     std::pair<std::string::const_iterator, std::variant<std::string, std::tuple<>>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const

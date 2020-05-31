@@ -10,6 +10,8 @@ namespace absinthe
 class uint_
 {
 public:
+    constexpr uint_() noexcept = default;
+
     std::pair<std::string::const_iterator, std::variant<std::string, unsigned>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
@@ -28,7 +30,7 @@ public:
         if (it == begin)
             return {begin, "error"};
 
-    return {it, result};
+        return {it, result};
     }
 };
 

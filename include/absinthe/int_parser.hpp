@@ -27,6 +27,8 @@ class int_
     }
 
 public:
+    constexpr int_() noexcept = default;
+
     std::pair<std::string::const_iterator, std::variant<std::string, int>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {

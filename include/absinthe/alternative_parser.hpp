@@ -16,7 +16,7 @@ class alternative
 {
 public:
     template<class L, class R>
-    alternative(L&& l, R&& r) : 
+    constexpr alternative(L&& l, R&& r) : 
         m_left_parser(std::forward<L>(l)),
         m_right_parser(std::forward<R>(r))
         {}
@@ -61,7 +61,7 @@ template<class L, class R>
 alternative(L&& l, R&& r) -> alternative<std::decay_t<L>, std::decay_t<R>>;
 
 template<class Left, class Right>
-auto operator|(Left&& left, Right&& right) 
+constexpr auto operator|(Left&& left, Right&& right) 
 {
     return alternative(std::forward<Left>(left), std::forward<Right>(right));
 }

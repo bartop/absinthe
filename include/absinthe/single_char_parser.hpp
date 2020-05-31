@@ -9,7 +9,7 @@ namespace absinthe
 class char_
 {
 public:
-    char_(char parsed) : m_parsed_char(parsed)
+    constexpr char_(char parsed) : m_parsed_char(parsed)
     {
     }
 

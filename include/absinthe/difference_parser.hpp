@@ -15,7 +15,7 @@ class difference
 {
 public:
     template<class L, class R>
-    difference(L&& l, R&& r) : 
+    constexpr difference(L&& l, R&& r) : 
         m_left_parser(std::forward<L>(l)),
         m_right_parser(std::forward<R>(r))
         {}

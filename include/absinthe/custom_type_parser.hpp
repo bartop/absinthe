@@ -15,7 +15,7 @@ class custom_type
 {
 public:
     template<class T, class F>
-    custom_type(
+    constexpr custom_type(
         T&& parser,
         F&& function
     ) : 

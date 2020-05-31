@@ -15,7 +15,7 @@ class sequence
 {
 public:
     template<class L, class R>
-    sequence(L&& l, R&& r) : 
+    constexpr sequence(L&& l, R&& r) : 
         m_left_parser(std::forward<L>(l)),
         m_right_parser(std::forward<R>(r))
         {}
@@ -50,7 +50,7 @@ template<class Left, class Right>
 sequence(Left&&, Right&&) -> sequence<std::decay_t<Left>, std::decay_t<Right>>;
 
 template<class Left, class Right>
-auto operator>>(Left&& left, Right&& right)
+constexpr auto operator>>(Left&& left, Right&& right)
 {
     return sequence(std::forward<Left>(left), std::forward<Right>(right));
 }
