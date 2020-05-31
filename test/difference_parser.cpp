@@ -15,7 +15,7 @@ TEST_CASE("difference parser", "")
     using absinthe::string_;
     using absinthe::int_;
 
-    auto parser = difference(int_(), string_("11"));
+    auto parser = int_() - string_("11");
 
     SECTION("parsing successful for matching input")
     {

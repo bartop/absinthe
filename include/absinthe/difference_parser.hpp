@@ -47,4 +47,10 @@ private:
 template<class L, class R>
 difference(L&& l, R&& r) -> difference<std::decay_t<L>, std::decay_t<R>>;
 
+
+template<class L, class R>
+constexpr auto operator-(L&& l, R&& r) {
+    return difference(std::forward<L>(l), std::forward<R>(r));
+}
+
 }
