@@ -57,22 +57,13 @@ private:
     Right m_right_parser;
 };
 
-template<class Left, class Right>
-auto make_alternative(Left&& left, Right&& right) 
-{
-    return alternative<std::decay_t<Left>, std::decay_t<Right>>(
-        std::forward<Left>(left),
-        std::forward<Right>(right)
-    );
-}
+template<class L, class R>
+alternative(L&& l, R&& r) -> alternative<std::decay_t<L>, std::decay_t<R>>;
 
 template<class Left, class Right>
 auto operator|(Left&& left, Right&& right) 
 {
-    return make_alternative(
-        std::forward<Left>(left),
-        std::forward<Right>(right)
-    );
+    return alternative(std::forward<Left>(left), std::forward<Right>(right));
 }
 
 }

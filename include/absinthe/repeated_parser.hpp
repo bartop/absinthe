@@ -57,20 +57,13 @@ private:
     }
 };
 
-template<class Parser>
-constexpr auto make_repeated(Parser&& parser, int min_times, int max_times) 
-{
-    return repeated<std::decay_t<Parser>>(
-        std::forward<Parser>(parser),
-        min_times,
-        max_times
-    );
-}
+template<class T>
+repeated(T&&, int, int) -> repeated<std::decay_t<T>>;
 
 template<class Parser>
 constexpr auto operator!(Parser&& parser)
 {
-    return repeated<std::decay_t<Parser>>(std::forward<Parser>(parser), 0, 1);
+    return repeated(std::forward<Parser>(parser), 0, 1);
 }
 
 }

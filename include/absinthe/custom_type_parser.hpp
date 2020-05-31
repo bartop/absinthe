@@ -11,11 +11,11 @@ namespace absinthe
 {
 
 template<class Parser, class Function>
-class custom_type_parser
+class custom_type
 {
 public:
     template<class T, class F>
-    custom_type_parser(
+    custom_type(
         T&& parser,
         F&& function
     ) : 
@@ -53,12 +53,7 @@ private:
 };
 
 template<class T, class F>
-auto make_custom_parser(T&& parser, F&& transforming_function)
-{
-    return custom_type_parser<std::decay_t<T>, std::decay_t<F>>(
-        std::forward<T>(parser),
-        std::forward<F>(transforming_function)
-    );
-}
+custom_type(T&& parser, F&& transforming_function) ->
+    custom_type<std::decay_t<T>, std::decay_t<F>>;
 
 }

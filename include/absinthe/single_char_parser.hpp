@@ -26,4 +26,4 @@ private:
     char m_parsed_char;
 };
 
-} // namespace absinthe
+}

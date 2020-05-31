@@ -17,10 +17,11 @@ std::string concat_vector(const std::vector<std::string>& strings)
 TEST_CASE("repeated parser", "")
 {
     using absinthe::string_;
+    using absinthe::repeated;
 
     SECTION("parsing successful")
     {
-        auto parser = make_repeated(string_("abc"), 0, 3);
+        auto parser = repeated(string_("abc"), 0, 3);
 
         std::vector<std::string> input = GENERATE(
             std::vector<std::string>{3, "abc"},
@@ -58,7 +59,7 @@ TEST_CASE("repeated parser", "")
 
     SECTION("parsing fails when matched too few repeated values")
     {
-        auto parser = make_repeated(string_("abc"), 3, 4);
+        auto parser = repeated(string_("abc"), 3, 4);
         std::string input_string = GENERATE("abc", "abcabc");
         
         auto [result_it, parsing_result] = parser.parse(input_string.begin(), input_string.end());
@@ -70,7 +71,7 @@ TEST_CASE("repeated parser", "")
 
     SECTION("parser does not consume values above specified limit")
     {
-        auto parser = make_repeated(string_("abc"), 1, 2);
+        auto parser = repeated(string_("abc"), 1, 2);
         std::string input_string = "abcabcabcabc";
 
         auto [result_it, parsing_result ] = parser.parse(input_string.begin(), input_string.end());

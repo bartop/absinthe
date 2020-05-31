@@ -9,9 +9,9 @@ template <class Parser>
 auto parse(
     std::string::const_iterator it,
     std::string::const_iterator end,
-    const Parser &parser) 
+    const Parser &parser)
 {
     return parser.parse(it, end);
 }
 
-} // namespace absinthe
+}

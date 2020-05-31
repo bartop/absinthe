@@ -12,5 +12,5 @@ fi
 
 cd build
 
-make -j4
+make
 make test

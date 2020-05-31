@@ -11,11 +11,11 @@ namespace absinthe
 {
 
 template<class Parser>
-class omitting_parser
+class omit
 {
 public:
     template<class T>
-    omitting_parser(T&& parser) : m_parser(std::forward<T>(parser)) {}
+    omit(T&& parser) : m_parser(std::forward<T>(parser)) {}
 
     std::pair<std::string::const_iterator, std::variant<std::string, std::tuple<>>>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
@@ -32,8 +32,6 @@ private:
 };
 
 template<class T>
-auto omit(T&& parser) {
-    return omitting_parser<std::decay_t<T>>(std::forward<T>(parser));
-}
+omit(T&& parser) -> omit<std::decay_t<T>>;
 
 }

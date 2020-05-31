@@ -9,8 +9,6 @@
 
 namespace absinthe
 {
-int parse_sign(std::string::const_iterator &begin);
-
 
 class int_
 {
@@ -18,6 +16,14 @@ class int_
     parse_unsigned(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         return uint_().parse(begin, end);
+    }
+
+    static int parse_sign(std::string::const_iterator &begin)
+    {
+        if (*begin != '-' && *begin != '+')
+            return 1;
+
+        return *begin++ == '+' ? 1 : -1;
     }
 
 public:
@@ -37,13 +43,5 @@ public:
             return { begin, "error" };
     }
 };
-
-int parse_sign(std::string::const_iterator &begin)
-{
-    if (*begin != '-' && *begin != '+')
-        return 1;
-
-    return *begin++ == '+' ? 1 : -1;
-}
 
 }

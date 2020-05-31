@@ -23,9 +23,9 @@ public:
             begin, end);
 
         if (parsed_it != m_parsed_string.end())
-            return {begin, "error" };
+            return {begin, "error"};
 
-        return {input_it, std::tuple<>{} };
+        return {input_it, std::tuple<>{}};
     }
 
 private:

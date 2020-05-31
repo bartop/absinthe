@@ -10,10 +10,10 @@
 
 TEST_CASE("peek parser", "")
 {
-    using absinthe::make_peek;
+    using absinthe::peek;
     using absinthe::int_;
 
-    auto parser = make_peek(int_());
+    auto parser = peek(int_());
 
     SECTION("parsing successful for matching input and result iterator is unmoved")
     {

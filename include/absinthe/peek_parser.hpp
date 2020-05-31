@@ -32,9 +32,6 @@ private:
 };
 
 template<class T>
-auto make_peek(T&& parser)
-{
-    return peek<std::decay_t<T>>(std::forward<T>(parser));
-}
+peek(T&& parser) -> peek<std::decay_t<T>>;
 
 }

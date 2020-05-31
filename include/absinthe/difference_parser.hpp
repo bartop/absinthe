@@ -45,12 +45,6 @@ private:
 };
 
 template<class L, class R>
-auto make_difference(L&& l, R&& r)
-{
-    return difference<std::decay_t<L>, std::decay_t<R>>(
-        std::forward<L>(l),
-        std::forward<R>(r)
-    );
-}
+difference(L&& l, R&& r) -> difference<std::decay_t<L>, std::decay_t<R>>;
 
 }

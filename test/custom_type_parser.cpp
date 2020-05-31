@@ -14,10 +14,10 @@ struct test_type {
 
 TEST_CASE("custom type parser", "")
 {
-    using absinthe::make_custom_parser;
+    using absinthe::custom_type;
     using absinthe::int_;
 
-    auto parser = make_custom_parser(
+    auto parser = custom_type(
         int_(),
         [](auto val) { return test_type{val}; }
     );
