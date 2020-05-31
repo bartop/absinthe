@@ -43,6 +43,25 @@ TEST_CASE("alternative parser", "string | int")
         REQUIRE(std::get_if<int>(value));
     }
 
+    SECTION("when parsing alternative of parsers returning same type"
+        "result is not an alternative")
+    {
+        auto parser = 
+            absinthe::string_("placeholder") |
+            absinthe::string_("value");
+        std::string parser_input = GENERATE("value", "placeholderddd");
+        auto [result_it, parsed] = parse(
+            parser_input.begin(),
+            parser_input.end(),
+            parser
+        );
+
+        REQUIRE(result_it != parser_input.begin());
+        auto value = std::get_if<1>(&parsed);
+        REQUIRE(value != nullptr);
+        REQUIRE(*value == std::tuple<>{});
+    }
+
     SECTION("parsing fails when input string is not fitting parser")
     {
         std::string parser_input = GENERATE("stuff", "aa", "int-p");

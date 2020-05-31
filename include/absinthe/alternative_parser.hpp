@@ -21,9 +21,13 @@ public:
         m_right_parser(std::forward<R>(r))
         {}
 
-    using return_t = variant_sum_t<
-        variantized_t<parser_result_t<Left>>,
-        variantized_t<parser_result_t<Right>>
+    using return_t = unwrap_single_element_pack_t<
+        filter_duplicates_t<
+            variant_sum_t<
+                variantized_t<parser_result_t<Left>>,
+                variantized_t<parser_result_t<Right>>
+            >
+        >
     >;
 
     std::pair<std::string::const_iterator, std::variant<std::string, return_t>>

@@ -1,3 +1,4 @@
+#pragma once
 
 #include <string>
 #include <variant>
@@ -6,6 +7,28 @@
 
 namespace absinthe
 {
+    
+template<class T, class...>
+struct filter_duplicates_helper {
+    using type = T;
+};
+
+template<template <class...> class C, class... Ts, class U, class... Us>
+struct filter_duplicates_helper<C<Ts...>, U, Us...> :
+    std::conditional_t<
+        (std::is_same_v<U, Ts> || ...),
+        filter_duplicates_helper<C<Ts...>, Us...>,
+        filter_duplicates_helper<C<Ts..., U>, Us...>
+    > { };
+
+template<class T>
+struct filter_duplicates;
+
+template<template <class...> class C, class... Args>
+struct filter_duplicates<C<Args...>> : filter_duplicates_helper<C<>, Args...> {};
+
+template<class T>
+using filter_duplicates_t = typename filter_duplicates<T>::type;
 
 template<class Parser>
 using parser_tuple_t = 
@@ -57,11 +80,24 @@ template<class... Args>
 struct is_variant<std::variant<Args...>> : std::true_type {};
 
 template<class T>
+struct unwrap_single_element_pack {
+    using type = T;
+};
+
+template<template <class...> class C, class T>
+struct unwrap_single_element_pack<C<T>> {
+    using type = T;
+};
+
+template<class T>
+using unwrap_single_element_pack_t = typename unwrap_single_element_pack<T>::type;
+
+template<class T>
 constexpr decltype(auto) variantize(T&& value) {
     if constexpr (is_variant<T>::value)
         return std::forward<T>(value);
-    
-    return std::variant<std::decay_t<T>>(std::forward<T>(value));
+    else
+        return std::variant<std::decay_t<T>>(std::forward<T>(value));
 }
 
 template<class T>
