@@ -10,7 +10,7 @@
 
 TEST_CASE("sequence parser", "")
 {
-    auto sequence_parser = absinthe::string_("double: ") >> absinthe::double_();
+    auto sequence_parser = "double: " >> absinthe::double_();
 
     SECTION("parsing successful")
     {
