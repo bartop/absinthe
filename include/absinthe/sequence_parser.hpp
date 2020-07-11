@@ -32,12 +32,12 @@ public:
         auto [first_it, first_result_variant] = m_left_parser.parse(begin, end);
         auto first_result = std::get_if<1>(&first_result_variant);
         if (!first_result) 
-            return {begin, "error" };
+            return {begin, std::get<0>(first_result_variant)};
 
         auto [second_it, second_result_variant] = m_right_parser.parse(first_it, end);
         auto second_result = std::get_if<1>(&second_result_variant);
         if (!second_result)
-            return {begin, "error" };
+            return {begin, std::get<0>(second_result_variant)};
 
         return { second_it, std::tuple_cat(tuplize(*first_result), tuplize(*second_result)) };
     }
@@ -91,22 +91,6 @@ constexpr auto operator>>(Left&& left, Right&& right)
 {
     return sequence(
         std::forward<Left>(left),
-        absinthe::string_(std::forward<Right>(right))
-    );
-}
-
-template<
-    class Left,
-    class Right,
-    std::enable_if_t<
-        std::is_convertible_v<Left, std::string> &&
-            std::is_convertible_v<Right, std::string>
-    >* = nullptr
->
-constexpr auto operator>>(Left&& left, Right&& right)
-{
-    return sequence(
-        absinthe::string_(std::forward<Left>(left)),
         absinthe::string_(std::forward<Right>(right))
     );
 }

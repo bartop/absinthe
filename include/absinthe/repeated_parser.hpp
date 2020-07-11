@@ -36,7 +36,7 @@ public:
             if (!success_value)
             {
                 if (i < m_min_times)
-                    return {begin, "error"};
+                    return {begin, "repeated parser failed - too few matches"};
                 else
                     return {result_it, result};
             }

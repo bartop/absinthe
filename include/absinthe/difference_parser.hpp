@@ -29,7 +29,7 @@ public:
         (void) unused;
         auto parse_error = std::get_if<0>(&result);
         if (!parse_error)
-            return {begin, "error"};
+            return {begin, "difference parser failed"};
 
         auto [result_it, second_result_variant] = m_left_parser.parse(begin, end);
         auto second_result = std::get_if<1>(&second_result_variant);
