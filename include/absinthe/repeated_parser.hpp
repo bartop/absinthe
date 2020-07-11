@@ -60,10 +60,4 @@ private:
 template<class T>
 repeated(T&&, int, int) -> repeated<std::decay_t<T>>;
 
-template<class Parser>
-constexpr auto operator!(Parser&& parser)
-{
-    return repeated(std::forward<Parser>(parser), 0, 1);
-}
-
 }

@@ -1,7 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
-#include <absinthe/string_parser.hpp>
 #include <absinthe/repeated_parser.hpp>
 #include <absinthe/string_parser.hpp>
 #include <absinthe/parse.hpp>
@@ -39,24 +38,6 @@ TEST_CASE("repeated parser", "")
         REQUIRE(std::vector<std::tuple<>>(input.size()) == actual);
     }
 
-    SECTION("reapeted parser works as optional parser")
-    {
-        auto parser = !string_("abc");
-
-        std::vector<std::string> input = GENERATE(
-            std::vector<std::string>{1, "abc"},
-            std::vector<std::string>{}
-        );
-
-        std::string input_string = concat_vector(input);
-        
-        auto [result_it, parsing_result] = parser.parse(input_string.begin(), input_string.end());
-        auto actual = std::get<1>(parsing_result);
-        
-        (void) result_it;
-        REQUIRE(std::vector<std::tuple<>>(input.size()) == actual);
-    }
-
     SECTION("parsing fails when matched too few repeated values")
     {
         auto parser = repeated(string_("abc"), 3, 4);
@@ -81,4 +62,3 @@ TEST_CASE("repeated parser", "")
         REQUIRE(actual.size() == 2);
     }
 }
-    

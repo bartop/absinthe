@@ -42,6 +42,7 @@ set(TEST_SOURCES
     test/peek_parser.cpp
     test/custom_type_parser.cpp
     test/omitting_parser.cpp
+    test/optional_parser.cpp
 )
 
 set(CATCH_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/catch)
