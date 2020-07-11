@@ -49,7 +49,13 @@ public:
                 std::variant<std::string, return_t>(std::in_place_index<1>, *second_result)
             };
 
-        return {begin, std::variant<std::string, return_t>(std::in_place_index<0>, "error") };
+        return {
+            begin,
+            std::variant<std::string, return_t>(
+                std::in_place_index<0>,
+                "alternative parser failed - matched none of alternatives"
+            )
+        };
     }
 
 private:
@@ -60,10 +66,49 @@ private:
 template<class L, class R>
 alternative(L&& l, R&& r) -> alternative<std::decay_t<L>, std::decay_t<R>>;
 
-template<class Left, class Right>
-constexpr auto operator|(Left&& left, Right&& right) 
+template<
+    class Left,
+    class Right,
+    std::enable_if_t<
+        !std::is_convertible_v<Left, std::string> &&
+            !std::is_convertible_v<Right, std::string>
+    >* = nullptr
+>
+constexpr auto operator|(Left&& left, Right&& right)
 {
     return alternative(std::forward<Left>(left), std::forward<Right>(right));
+}
+
+template<
+    class Left,
+    class Right,
+    std::enable_if_t<
+        std::is_convertible_v<Left, std::string> &&
+            !std::is_convertible_v<Right, std::string>
+    >* = nullptr
+>
+constexpr auto operator|(Left&& left, Right&& right)
+{
+    return alternative(
+        absinthe::string_(std::forward<Left>(left)),
+        std::forward<Right>(right)
+    );
+}
+
+template<
+    class Left,
+    class Right,
+    std::enable_if_t<
+        !std::is_convertible_v<Left, std::string> &&
+            std::is_convertible_v<Right, std::string>
+    >* = nullptr
+>
+constexpr auto operator|(Left&& left, Right&& right)
+{
+    return alternative(
+        std::forward<Left>(left),
+        absinthe::string_(std::forward<Right>(right))
+    );
 }
 
 }

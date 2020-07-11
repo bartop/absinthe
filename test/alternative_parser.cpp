@@ -12,7 +12,7 @@
 
 TEST_CASE("alternative parser", "string | int")
 {
-    auto alternative_parser = absinthe::string_("int-placeholder") | absinthe::int_();
+    auto alternative_parser = "int-placeholder" | absinthe::int_();
 
     SECTION("parsing successful for first alternative")
     {
