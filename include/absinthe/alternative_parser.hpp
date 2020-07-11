@@ -71,7 +71,7 @@ template<
     class Right,
     std::enable_if_t<
         !std::is_convertible_v<Left, std::string> &&
-            !std::is_convertible_v<Right, std::string>
+        !std::is_convertible_v<Right, std::string>
     >* = nullptr
 >
 constexpr auto operator|(Left&& left, Right&& right)
@@ -84,7 +84,7 @@ template<
     class Right,
     std::enable_if_t<
         std::is_convertible_v<Left, std::string> &&
-            !std::is_convertible_v<Right, std::string>
+        !std::is_convertible_v<Right, std::string>
     >* = nullptr
 >
 constexpr auto operator|(Left&& left, Right&& right)
@@ -100,7 +100,7 @@ template<
     class Right,
     std::enable_if_t<
         !std::is_convertible_v<Left, std::string> &&
-            std::is_convertible_v<Right, std::string>
+        std::is_convertible_v<Right, std::string>
     >* = nullptr
 >
 constexpr auto operator|(Left&& left, Right&& right)

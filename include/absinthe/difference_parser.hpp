@@ -48,9 +48,40 @@ template<class L, class R>
 difference(L&& l, R&& r) -> difference<std::decay_t<L>, std::decay_t<R>>;
 
 
-template<class L, class R>
+template<
+    class L,
+    class R,
+    std::enable_if_t<
+        !std::is_convertible_v<L, std::string> &&
+        !std::is_convertible_v<R, std::string>
+    >* = nullptr
+>
 constexpr auto operator-(L&& l, R&& r) {
     return difference(std::forward<L>(l), std::forward<R>(r));
+}
+
+template<
+    class L,
+    class R,
+    std::enable_if_t<
+        !std::is_convertible_v<L, std::string> &&
+        std::is_convertible_v<R, std::string>
+    >* = nullptr
+>
+constexpr auto operator-(L&& l, R&& r) {
+    return difference(std::forward<L>(l), string_(std::forward<R>(r)));
+}
+
+template<
+    class L,
+    class R,
+    std::enable_if_t<
+        std::is_convertible_v<L, std::string> &&
+        !std::is_convertible_v<R, std::string>
+    >* = nullptr
+>
+constexpr auto operator-(L&& l, R&& r) {
+    return difference(string_(std::forward<L>(l)), std::forward<R>(r));
 }
 
 }

@@ -14,8 +14,7 @@ template<class Left, class Right>
 class sequence
 {
 public:
-    template< class L, class R>
-
+    template<class L, class R>
     constexpr sequence(L&& l, R&& r) : 
         m_left_parser(std::forward<L>(l)),
         m_right_parser(std::forward<R>(r))
@@ -47,51 +46,51 @@ private:
     Right m_right_parser;
 };
 
-template<class Left, class Right>
-sequence(Left&&, Right&&) -> sequence<std::decay_t<Left>, std::decay_t<Right>>;
+template<class L, class R>
+sequence(L&&, R&&) -> sequence<std::decay_t<L>, std::decay_t<R>>;
 
 template<
-    class Left,
-    class Right,
+    class L,
+    class R,
     std::enable_if_t<
-        !std::is_convertible_v<Left, std::string> &&
-            !std::is_convertible_v<Right, std::string>
+        !std::is_convertible_v<L, std::string> &&
+        !std::is_convertible_v<R, std::string>
     >* = nullptr
 >
-constexpr auto operator>>(Left&& left, Right&& right)
+constexpr auto operator>>(L&& left, R&& right)
 {
-    return sequence(std::forward<Left>(left), std::forward<Right>(right));
+    return sequence(std::forward<L>(left), std::forward<R>(right));
 }
 
 template<
-    class Left,
-    class Right,
+    class L,
+    class R,
     std::enable_if_t<
-        std::is_convertible_v<Left, std::string> &&
-            !std::is_convertible_v<Right, std::string>
+        std::is_convertible_v<L, std::string> &&
+        !std::is_convertible_v<R, std::string>
     >* = nullptr
 >
-constexpr auto operator>>(Left&& left, Right&& right)
+constexpr auto operator>>(L&& left, R&& right)
 {
     return sequence(
-        absinthe::string_(std::forward<Left>(left)),
-        std::forward<Right>(right)
+        absinthe::string_(std::forward<L>(left)),
+        std::forward<R>(right)
     );
 }
 
 template<
-    class Left,
-    class Right,
+    class L,
+    class R,
     std::enable_if_t<
-        !std::is_convertible_v<Left, std::string> &&
-            std::is_convertible_v<Right, std::string>
+        !std::is_convertible_v<L, std::string> &&
+        std::is_convertible_v<R, std::string>
     >* = nullptr
 >
-constexpr auto operator>>(Left&& left, Right&& right)
+constexpr auto operator>>(L&& left, R&& right)
 {
     return sequence(
-        std::forward<Left>(left),
-        absinthe::string_(std::forward<Right>(right))
+        std::forward<L>(left),
+        absinthe::string_(std::forward<R>(right))
     );
 }
 
