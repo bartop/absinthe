@@ -1,6 +1,4 @@
 
-#define CATCH_CONFIG_MAIN
-
 #include <catch.hpp>
 
 #include <absinthe/int_parser.hpp>
@@ -9,14 +7,20 @@
 #include <absinthe/parse.hpp>
 
 #include <string>
+#include <list>
+#include <vector>
 
-TEST_CASE("alternative parser", "string | int")
+TEMPLATE_TEST_CASE(
+    "alternative string | int parser",
+    "[parser][alternative]",
+    std::string, std::vector<char>, std::list<char>)
 {
     auto alternative_parser = "int-placeholder" | absinthe::int_();
 
     SECTION("parsing successful for first alternative")
     {
-        std::string parser_input = GENERATE("int-placeholder 3.14", "int-placeholdergf");
+        std::string basic_input = GENERATE("int-placeholder 3.14", "int-placeholdergf");
+        auto parser_input = TestType(basic_input.begin(), basic_input.end());
         auto [result_it, parsed] = parse(
             parser_input.begin(),
             parser_input.end(),
@@ -30,7 +34,8 @@ TEST_CASE("alternative parser", "string | int")
 
     SECTION("parsing successful for second alternative")
     {
-        std::string parser_input = GENERATE("3.14 5 asd", "121.4aaa");
+        std::string basic_input = GENERATE("3.14 5 asd", "121.4aaa");
+        auto parser_input = TestType(basic_input.begin(), basic_input.end());
         auto [result_it, parsed] = parse(
             parser_input.begin(),
             parser_input.end(),
@@ -49,7 +54,8 @@ TEST_CASE("alternative parser", "string | int")
         auto parser = 
             absinthe::string_("placeholder") |
             absinthe::string_("value");
-        std::string parser_input = GENERATE("value", "placeholderddd");
+        auto basic_input = GENERATE(as<std::string>{}, "value", "placeholderddd");
+        auto parser_input = TestType(basic_input.begin(), basic_input.end());
         auto [result_it, parsed] = parse(
             parser_input.begin(),
             parser_input.end(),
@@ -64,7 +70,8 @@ TEST_CASE("alternative parser", "string | int")
 
     SECTION("parsing fails when input string is not fitting parser")
     {
-        std::string parser_input = GENERATE("stuff", "aa", "int-p");
+        auto basic_input = GENERATE(as<std::string>{}, "stuff", "aa", "int-p");
+        auto parser_input = TestType(basic_input.begin(), basic_input.end());
         auto [result, parsed] = parse(
             parser_input.begin(),
             parser_input.end(),
@@ -78,7 +85,8 @@ TEST_CASE("alternative parser", "string | int")
 
     SECTION("parsing fails when input string is empty")
     {
-        std::string parser_input;
+        std::string basic_input;
+        auto parser_input = TestType(basic_input.begin(), basic_input.end());
         auto [result, parsed] = parse(
             parser_input.begin(),
             parser_input.end(),

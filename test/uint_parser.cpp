@@ -1,56 +1,46 @@
-#define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
 #include <absinthe/uint_parser.hpp>
 #include <absinthe/parse.hpp>
 
 #include <string>
+#include <vector>
+#include <list>
 
-TEST_CASE("unsigned int parser", "")
+TEMPLATE_TEST_CASE(
+    "unsigned int parser",
+    "[int][unsigned][parser]",
+    std::string, std::vector<char>, std::list<char>)
 {
     auto uint_parser = absinthe::uint_();
 
     SECTION("parsing successful when input string matches a number")
     {
-        auto expected = int();
-        auto parser_input = std::string();
+        auto input = GENERATE(as<std::string>{}, "314", "000314", "314abc");
+        auto parseme = TestType(input.begin(), input.end());
 
-        SECTION("input string is positive number")
-        {
-            expected = 314;
-            parser_input = std::to_string(expected);
-        }
-        SECTION("input string has leading zeros")
-        {
-            expected = 314;
-            parser_input = "000" + std::to_string(expected);
-        }
-        SECTION("longer input string sucessfully matched")
-        {
-            expected = 314;
-            parser_input = std::to_string(expected) + "abc";
-        }
-
-        auto [result, parsed] = absinthe::parse(parser_input.begin(), parser_input.end(), uint_parser);
-        REQUIRE(result != parser_input.begin());
+        auto [result, parsed] = absinthe::parse(parseme, uint_parser);
+        REQUIRE(result != parseme.begin());
         
-        REQUIRE(std::get<unsigned>(parsed) == expected);
+        REQUIRE(std::get<unsigned>(parsed) == std::stoul(input));
     }
 
     SECTION("parsing fails when input string does not match a number")
     {
-        std::string parser_input = "bac3";
-        auto [result, parsed] = absinthe::parse(parser_input.begin(), parser_input.end(), uint_parser);
-        REQUIRE(result == parser_input.begin());
+        std::string input = "bac3";
+        auto parseme = TestType(input.begin(), input.end());
+        auto [result, parsed] = absinthe::parse(parseme, uint_parser);
+        REQUIRE(result == parseme.begin());
         auto error = std::get_if<0>(&parsed);
         REQUIRE(error != nullptr);
     }
 
     SECTION("parsing fails when input string is empty")
     {
-        std::string parser_input;
-        auto [result, parsed] = absinthe::parse(parser_input.begin(), parser_input.end(), uint_parser);
-        REQUIRE(result == parser_input.begin());
+        std::string input;
+        auto parseme = TestType(input.begin(), input.end());
+        auto [result, parsed] = absinthe::parse(parseme, uint_parser);
+        REQUIRE(result == parseme.begin());
         auto error = std::get_if<0>(&parsed);
         REQUIRE(error != nullptr);
     }

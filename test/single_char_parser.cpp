@@ -1,28 +1,33 @@
-
-#define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
 #include <absinthe/single_char_parser.hpp>
 #include <absinthe/parse.hpp>
 
 #include <string>
+#include <vector>
+#include <list>
 
-TEST_CASE("single char parser", "")
+TEMPLATE_TEST_CASE(
+    "single char parser",
+    "[parser][char]",
+    std::string, std::vector<char>, std::list<char>)
 {
 	auto char_parser = absinthe::char_('a');
 
 	SECTION("parser matches input string")
 	{
-		std::string parseme = "a";
-		auto [result, parsed] = absinthe::parse(parseme.begin(), parseme.end(), char_parser);
+		std::string input = "a";
+        auto parseme = TestType(input.begin(), input.end());
+		auto [result, parsed] = absinthe::parse(parseme, char_parser);
 		REQUIRE(result == parseme.end());
 		REQUIRE(std::get<char>(parsed) == 'a');
 	}
 	
 	SECTION("parser does not match input string")
 	{
-		std::string parseme = "b";
-		auto [result, parsed] = absinthe::parse(parseme.begin(), parseme.end(), char_parser);
+		std::string input = "b";
+        auto parseme = TestType(input.begin(), input.end());
+		auto [result, parsed] = absinthe::parse(parseme, char_parser);
 		REQUIRE(result == parseme.begin());
 		auto error = std::get_if<std::string>(&parsed);
 		REQUIRE(error != nullptr);
@@ -30,8 +35,9 @@ TEST_CASE("single char parser", "")
 
 	SECTION("parser fails to parse empty input string")
 	{
-		std::string parseme;
-		auto [result, parsed] = absinthe::parse(parseme.begin(), parseme.end(), char_parser);
+		std::string input;
+        auto parseme = TestType(input.begin(), input.end());
+		auto [result, parsed] = absinthe::parse(parseme, char_parser);
 		REQUIRE(result == parseme.begin());
 		
 		auto error = std::get_if<std::string>(&parsed);
@@ -40,8 +46,9 @@ TEST_CASE("single char parser", "")
 
 	SECTION("longer input string sucessfully matched")
 	{
-		std::string parseme = "ab";
-		auto [result, parsed] = absinthe::parse(parseme.begin(), parseme.end(), char_parser);
+		std::string input = "ab";
+        auto parseme = TestType(input.begin(), input.end());
+		auto [result, parsed] = absinthe::parse(parseme, char_parser);
 		REQUIRE(result == ++parseme.begin());
 		REQUIRE(std::get<char>(parsed) == 'a');
 	}	
