@@ -1,6 +1,7 @@
 #pragma once
 
 #include "uint_parser.hpp"
+#include "parse_result.hpp"
 
 #include <variant>
 #include <string>
@@ -12,13 +13,14 @@ namespace absinthe
 
 class int_
 {
-    std::pair<std::string::const_iterator, std::variant<std::string, unsigned>>
-    parse_unsigned(std::string::const_iterator begin, std::string::const_iterator end) const
+    template<class It>
+    parse_result<It, unsigned int> parse_unsigned(It begin, It end) const
     {
         return uint_().parse(begin, end);
     }
 
-    static int parse_sign(std::string::const_iterator &begin)
+    template<class It>
+    static int parse_sign(It &begin)
     {
         if (*begin != '-' && *begin != '+')
             return 1;
@@ -29,8 +31,8 @@ class int_
 public:
     constexpr int_() noexcept = default;
 
-    std::pair<std::string::const_iterator, std::variant<std::string, int>>
-    parse(std::string::const_iterator begin, std::string::const_iterator end) const
+    template<class It>
+    parse_result<It, int> parse(It begin, It end) const
     {
         if (begin == end)
             return {begin, "error"};

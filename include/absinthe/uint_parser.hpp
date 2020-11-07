@@ -1,8 +1,6 @@
 #pragma once
 
-#include <string>
-#include <utility>
-#include <variant>
+#include "parse_result.hpp"
 
 namespace absinthe
 {
@@ -12,8 +10,8 @@ class uint_
 public:
     constexpr uint_() noexcept = default;
 
-    std::pair<std::string::const_iterator, std::variant<std::string, unsigned>>
-    parse(std::string::const_iterator begin, std::string::const_iterator end) const
+    template<class It>
+    parse_result<It, unsigned> parse(It begin, It end) const
     {
         unsigned result = 0;
         auto it = begin;

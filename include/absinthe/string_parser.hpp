@@ -1,9 +1,8 @@
 #pragma once
 
+#include "parse_result.hpp"
+
 #include <tuple>
-#include <string>
-#include <variant>
-#include <utility>
 #include <algorithm>
 
 namespace absinthe
@@ -15,15 +14,15 @@ public:
     string_(std::string parsed) : m_parsed_string(std::move(parsed))
     { }
 
-    std::pair<std::string::const_iterator, std::variant<std::string, std::tuple<>>>
-    parse(std::string::const_iterator begin, std::string::const_iterator end) const
+    template<class It>
+    parse_result<It, std::tuple<>> parse(It begin, It end) const
     {
         auto [parsed_it, input_it] = std::mismatch(
             m_parsed_string.begin(), m_parsed_string.end(),
             begin, end);
 
         if (parsed_it != m_parsed_string.end())
-            return {begin, "error"};
+            return {begin, "failed to parse string"};
 
         return {input_it, std::tuple<>{}};
     }

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "traits.hpp"
+#include "parse_result.hpp"
 
 #include <string>
 #include <variant>
@@ -30,15 +31,18 @@ public:
         >
     >;
 
-    std::pair<std::string::const_iterator, std::variant<std::string, return_t>>
-    parse(std::string::const_iterator begin, std::string::const_iterator end) const
+    template<class It>
+    parse_result<It, return_t> parse(It begin, It end) const
     {
         auto [first_it, first_result_variant] = m_left_parser.parse(begin, end);
         auto first_result = std::get_if<1>(&first_result_variant);
         if (first_result) 
             return {
                 first_it,
-                std::variant<std::string, return_t>(std::in_place_index<1>, *first_result)
+                std::variant<std::string, return_t>(
+                    std::in_place_index<1>,
+                    *first_result
+                )
             };
 
         auto [second_it, second_result_variant] = m_right_parser.parse(first_it, end);
@@ -46,7 +50,10 @@ public:
         if (second_result)
             return {
                 second_it,
-                std::variant<std::string, return_t>(std::in_place_index<1>, *second_result)
+                std::variant<std::string, return_t>(
+                    std::in_place_index<1>,
+                    *second_result
+                )
             };
 
         return {

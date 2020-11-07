@@ -1,6 +1,7 @@
 #pragma once
 
 #include "traits.hpp"
+#include "parse_result.hpp"
 
 #include <string>
 #include <variant>
@@ -25,7 +26,7 @@ public:
         std::declval<decltype(tuplize(std::declval<parser_result_t<Right>>()))>() 
     ));
 
-    std::pair<std::string::const_iterator, std::variant<std::string, tuple_t>>
+    parse_result<std::string::const_iterator, tuple_t>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         auto [first_it, first_result_variant] = m_left_parser.parse(begin, end);

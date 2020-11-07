@@ -2,11 +2,13 @@
 
 #include "uint_parser.hpp"
 #include "int_parser.hpp"
+#include "parse_result.hpp"
 
 #include <variant>
 #include <string>
 #include <utility>
 #include <algorithm>
+#include <cmath>
 
 namespace absinthe
 {
@@ -14,7 +16,8 @@ namespace absinthe
 class double_
 {
 private:
-    int get_sign(std::string::const_iterator &begin) const
+    template<class It>
+    int get_sign(It &begin) const
     {
         if (*begin != '+' && *begin != '-')
             return 1;
@@ -23,8 +26,8 @@ private:
     }
 
 public:
-    std::pair<std::string::const_iterator, std::variant<std::string,double>>
-    parse(std::string::const_iterator begin, std::string::const_iterator end) const
+    template<class It>
+    parse_result<It, double> parse(It begin, It end) const
     {
         if (begin == end)
             return {begin, "error"};

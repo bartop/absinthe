@@ -1,6 +1,7 @@
 #pragma once
 
 #include "traits.hpp"
+#include "parse_result.hpp"
 
 #include <vector>
 #include <string>
@@ -22,7 +23,7 @@ public:
     {
     }
 
-    std::pair<std::string::const_iterator, std::variant<std::string, result_t>>
+    parse_result<std::string::const_iterator, result_t>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         result_t result;

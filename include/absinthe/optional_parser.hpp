@@ -1,6 +1,7 @@
 #pragma once
 
 #include "traits.hpp"
+#include "parse_result.hpp"
 
 #include <string>
 #include <variant>
@@ -19,7 +20,7 @@ public:
 
     using return_t = std::optional<parser_result_t<Parser>>;
 
-    std::pair<std::string::const_iterator, std::variant<std::string, return_t>>
+    parse_result<std::string::const_iterator, return_t>
     parse(std::string::const_iterator begin, std::string::const_iterator end) const
     {
         auto [it, result_variant] = m_parser.parse(begin, end);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "parse_result.hpp"
+
 #include <string>
 #include <variant>
 
@@ -10,11 +12,10 @@ class char_
 {
 public:
     constexpr char_(char parsed) : m_parsed_char(parsed)
-    {
-    }
+    { }
 
-    std::pair<std::string::const_iterator, std::variant<std::string, char>>
-    parse(std::string::const_iterator begin, std::string::const_iterator end) const
+    template<class It>
+    parse_result<It, char> parse(It begin, It end) const
     {
         if (begin == end || *begin != m_parsed_char)
             return { begin, "error" };
