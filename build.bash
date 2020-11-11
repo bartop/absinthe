@@ -2,15 +2,15 @@
 
 set -e
 
-if [ ! -d build ]
+if [ ! -d .build ]
 then
-    mkdir -p build
-    cd build
+    mkdir -p .build
+    cd .build
     cmake ..
     cd ..
 fi
 
-cd build
+cd .build
 
 make
 make test
