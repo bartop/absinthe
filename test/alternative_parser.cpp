@@ -11,7 +11,7 @@
 #include <vector>
 
 TEMPLATE_TEST_CASE(
-    "alternative string | int parser",
+    "alternative (string | int) parser",
     "[parser][alternative]",
     std::string, std::vector<char>, std::list<char>)
 {
@@ -48,26 +48,6 @@ TEMPLATE_TEST_CASE(
         REQUIRE(std::get_if<int>(value));
     }
 
-    SECTION("when parsing alternative of parsers returning same type"
-        "result is not an alternative")
-    {
-        auto parser = 
-            absinthe::string_("placeholder") |
-            absinthe::string_("value");
-        auto basic_input = GENERATE(as<std::string>{}, "value", "placeholderddd");
-        auto parser_input = TestType(basic_input.begin(), basic_input.end());
-        auto [result_it, parsed] = parse(
-            parser_input.begin(),
-            parser_input.end(),
-            parser
-        );
-
-        REQUIRE(result_it != parser_input.begin());
-        auto value = std::get_if<1>(&parsed);
-        REQUIRE(value != nullptr);
-        REQUIRE(*value == std::tuple<>{});
-    }
-
     SECTION("parsing fails when input string is not fitting parser")
     {
         auto basic_input = GENERATE(as<std::string>{}, "stuff", "aa", "int-p");
@@ -97,4 +77,25 @@ TEMPLATE_TEST_CASE(
         auto error = std::get_if<std::string>(&parsed);
         REQUIRE(error != nullptr);
     }
+}
+
+
+TEMPLATE_TEST_CASE(
+    "alternative (string | string) parser",
+    "[parser][alternative]",
+    std::string, std::vector<char>, std::list<char>)
+{
+    auto parser = absinthe::string_("placeholder") | "value";
+    auto basic_input = GENERATE(as<std::string>{}, "value", "placeholderddd");
+    auto parser_input = TestType(basic_input.begin(), basic_input.end());
+    auto [result_it, parsed] = parse(
+        parser_input.begin(),
+        parser_input.end(),
+        parser
+    );
+
+    REQUIRE(result_it != parser_input.begin());
+    auto value = std::get_if<1>(&parsed);
+    REQUIRE(value != nullptr);
+    REQUIRE(*value == std::tuple<>{});
 }

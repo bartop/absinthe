@@ -23,8 +23,8 @@ public:
     {
     }
 
-    parse_result<std::string::const_iterator, result_t>
-    parse(std::string::const_iterator begin, std::string::const_iterator end) const
+    template <class It>
+    parse_result<It, result_t> parse(It begin, It end) const
     {
         result_t result;
         auto result_it = begin;

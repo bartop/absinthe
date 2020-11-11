@@ -26,8 +26,8 @@ public:
         std::declval<decltype(tuplize(std::declval<parser_result_t<Right>>()))>() 
     ));
 
-    parse_result<std::string::const_iterator, tuple_t>
-    parse(std::string::const_iterator begin, std::string::const_iterator end) const
+    template<class It>
+    parse_result<It, tuple_t> parse(It begin, It end) const
     {
         auto [first_it, first_result_variant] = m_left_parser.parse(begin, end);
         auto first_result = std::get_if<1>(&first_result_variant);
@@ -39,7 +39,10 @@ public:
         if (!second_result)
             return {begin, std::get<0>(second_result_variant)};
 
-        return { second_it, std::tuple_cat(tuplize(*first_result), tuplize(*second_result)) };
+        return {
+            second_it,
+            std::tuple_cat(tuplize(*first_result), tuplize(*second_result))
+        };
     }
 
 private:

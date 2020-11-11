@@ -29,15 +29,18 @@ public:
         )
     );
 
-    parse_result<std::string::const_iterator, result_t>
-    parse(std::string::const_iterator begin, std::string::const_iterator end) const
+    template<class It>
+    parse_result<It, result_t> parse(It begin, It end) const
     {
         auto [result_it, result_variant] = m_parser.parse(begin, end);
         auto result = std::get_if<1>(&result_variant);
         if (!result)
             return {
                 begin,
-                std::variant<std::string, result_t>(std::in_place_index<0>, "error")
+                std::variant<std::string, result_t>(
+                    std::in_place_index<0>,
+                    "error"
+                )
             };
         return {
             result_it,

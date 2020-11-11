@@ -49,7 +49,7 @@ public:
         if (!right_of_dot_value)
             return {--it, result};
 
-        double divisor = std::pow(10, (double_end_it - it));
+        double divisor = std::pow(10, std::distance(it, double_end_it));
         result += (static_cast<long long>(*right_of_dot_value) * sign) / divisor;
 
         return {double_end_it, result};

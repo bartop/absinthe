@@ -6,8 +6,12 @@
 
 #include <string>
 #include <numeric>
+#include <list>
 
-TEST_CASE("optional parser", "")
+TEMPLATE_TEST_CASE(
+    "optional parser",
+    "[parser][optional_parser]",
+    std::string, std::vector<char>, std::list<char>)
 {
     using absinthe::string_;
     using absinthe::optional;
@@ -16,7 +20,8 @@ TEST_CASE("optional parser", "")
     {
         auto parser = !string_("abc");
 
-        auto input = std::string{"abc"};
+        auto input_string = std::string{"abc"};
+        auto input = TestType(input_string.begin(), input_string.end());
         
         auto [result_it, parsing_result] =
             parser.parse(input.begin(), input.end());
@@ -30,21 +35,8 @@ TEST_CASE("optional parser", "")
     {
         auto parser = !string_("abc");
 
-        auto input = std::string{"fdsdsfsd"};
-        
-        auto [result_it, parsing_result] =
-            parser.parse(input.begin(), input.end());
-        auto actual = std::get<1>(parsing_result);
-        
-        REQUIRE(std::nullopt == actual);
-        REQUIRE(result_it == input.begin());
-    }
-
-    SECTION("optional parser parses empty input")
-    {
-        auto parser = !string_("abc");
-
-        auto input = std::string{};
+        auto input_string = std::string{GENERATE("", "fdsdsfsd")};
+        auto input = TestType(input_string.begin(), input_string.end());
         
         auto [result_it, parsing_result] =
             parser.parse(input.begin(), input.end());
