@@ -43,6 +43,7 @@ set(TEST_SOURCES
     test/custom_type_parser.cpp
     test/omitting_parser.cpp
     test/optional_parser.cpp
+    test/char_set_parser.cpp
     test/parse.cpp
 )
 
