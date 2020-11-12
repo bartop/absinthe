@@ -8,10 +8,10 @@
 namespace absinthe
 {
 
-class char_
+class single_char
 {
 public:
-    constexpr char_(char parsed) : m_parsed_char(parsed)
+    constexpr single_char(char parsed) : m_parsed_char(parsed)
     { }
 
     template<class It>

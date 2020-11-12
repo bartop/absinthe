@@ -11,7 +11,7 @@ public:
     constexpr uint_() noexcept = default;
 
     template<class It>
-    parse_result<It, unsigned> parse(It begin, It end) const
+    constexpr parse_result<It, unsigned> parse(It begin, It end) const
     {
         unsigned result = 0;
         auto it = begin;
@@ -26,9 +26,9 @@ public:
         }
 
         if (it == begin)
-            return {begin, "error"};
+            return { begin, "Error while parsing uint - parsed range is empty" };
 
-        return {it, result};
+        return { it, result };
     }
 };
 

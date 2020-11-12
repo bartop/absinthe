@@ -1,6 +1,6 @@
 #include <catch.hpp>
 
-#include <absinthe/single_char_parser.hpp>
+#include <absinthe/char_parser.hpp>
 #include <absinthe/parse.hpp>
 
 #include <string>
@@ -12,13 +12,13 @@ TEMPLATE_TEST_CASE(
     "[parser][char]",
     std::string, std::vector<char>, std::list<char>)
 {
-	auto char_parser = absinthe::char_('a');
+	auto parser = absinthe::char_('a');
 
 	SECTION("parser matches input string")
 	{
 		std::string input = "a";
         auto parseme = TestType(input.begin(), input.end());
-		auto [result, parsed] = absinthe::parse(parseme, char_parser);
+		auto [result, parsed] = absinthe::parse(parseme, parser);
 		REQUIRE(result == parseme.end());
 		REQUIRE(std::get<char>(parsed) == 'a');
 	}
@@ -27,7 +27,7 @@ TEMPLATE_TEST_CASE(
 	{
 		std::string input = "b";
         auto parseme = TestType(input.begin(), input.end());
-		auto [result, parsed] = absinthe::parse(parseme, char_parser);
+		auto [result, parsed] = absinthe::parse(parseme, parser);
 		REQUIRE(result == parseme.begin());
 		auto error = std::get_if<std::string>(&parsed);
 		REQUIRE(error != nullptr);
@@ -37,7 +37,7 @@ TEMPLATE_TEST_CASE(
 	{
 		std::string input;
         auto parseme = TestType(input.begin(), input.end());
-		auto [result, parsed] = absinthe::parse(parseme, char_parser);
+		auto [result, parsed] = absinthe::parse(parseme, parser);
 		REQUIRE(result == parseme.begin());
 		
 		auto error = std::get_if<std::string>(&parsed);
@@ -48,7 +48,7 @@ TEMPLATE_TEST_CASE(
 	{
 		std::string input = "ab";
         auto parseme = TestType(input.begin(), input.end());
-		auto [result, parsed] = absinthe::parse(parseme, char_parser);
+		auto [result, parsed] = absinthe::parse(parseme, parser);
 		REQUIRE(result == ++parseme.begin());
 		REQUIRE(std::get<char>(parsed) == 'a');
 	}	

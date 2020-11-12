@@ -1,6 +1,6 @@
 #include <catch.hpp>
 
-#include <absinthe/char_set_parser.hpp>
+#include <absinthe/char_parser.hpp>
 #include <absinthe/parse.hpp>
 
 #include <string>
@@ -9,10 +9,10 @@
 
 TEMPLATE_TEST_CASE(
     "char set parser",
-    "[parser][char_set]",
+    "[parser][single_char]",
     std::string, std::vector<char>, std::list<char>)
 {
-    auto parser = absinthe::char_set("abc");
+    auto parser = absinthe::char_("abc");
 
     SECTION("parser processes matching input")
     {
