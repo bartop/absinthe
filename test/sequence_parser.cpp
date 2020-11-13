@@ -16,41 +16,46 @@ TEMPLATE_TEST_CASE(
 {
     auto sequence_parser = "double: " >> absinthe::double_();
 
-    SECTION("parsing successful")
+    SECTION("parsing successful when string matches parser")
     {
-        auto input_string = std::string{GENERATE(
-            "double: 3.14",
+        auto number = GENERATE(as<std::string>{}, "3.14", "5.12", "3");
+        SECTION(number) 
+        {
+            auto input_string = "double: " + number;
+            auto input = TestType(input_string.begin(), input_string.end());
+            auto [it, parsed] =
+                parse(input.begin(), input.end(), sequence_parser);
+
+            REQUIRE(it == input.end());
+            REQUIRE(std::get<double>(std::get<1>(parsed)) == Approx(std::stod(number)));
+        }
+    }
+
+    SECTION("parsing successful when string start matches parser")
+    {
+        auto input_string = GENERATE(
+            as<std::string>{},
             "double: 3.14 5 asd",
             "double: 3.14aaa"
-        )};
+        );
         auto input = TestType(input_string.begin(), input_string.end());
-        auto [result_it, parsed] =
+        auto [it, parsed] =
             parse(input.begin(), input.end(), sequence_parser);
 
-        REQUIRE(result_it != input.begin());
+        REQUIRE(it != input.begin());
         REQUIRE(std::get<double>(std::get<1>(parsed)) == Approx(3.14));
     }
 
-    SECTION("parsing fails when input string is empty")
+    SECTION("parsing fails when input string does not match full pattern")
     {
-        auto input = TestType{};
-        auto [result, parsed] = 
+        using absinthe::parser_error;
+        auto input_string = GENERATE(as<std::string>{}, "", "double: ");
+        auto input = TestType{input_string.begin(), input_string.end()};
+        auto [it, parsed] = 
             absinthe::parse(input.begin(), input.end(), sequence_parser);
 
-        REQUIRE(result == input.begin());
-        auto error = std::get_if<std::string>(&parsed);
+        REQUIRE(it == input.begin());
+        auto error = std::get_if<parser_error>(&parsed);
         REQUIRE(error != nullptr);
     }
-
-    SECTION("parsing fails when input string matches only a part of declared pattern")
-    {
-        auto input_string = std::string{"double: "};
-        auto input = TestType(input_string.begin(), input_string.end());
-        auto [result, parsed] = parse(input.begin(), input.end(), sequence_parser);
-
-        REQUIRE(result == input.begin());
-        auto error = std::get_if<std::string>(&parsed);
-        REQUIRE(error != nullptr);
-    }
-
 }

@@ -28,14 +28,13 @@ TEMPLATE_TEST_CASE(
 
     SECTION("parsing successful for matching input")
     {
-        std::string basic_input = GENERATE("1", "2", "10", "22");
-        auto input_string = TestType(basic_input.begin(), basic_input.end());
+        auto input_string = GENERATE(as<std::string>{}, "1", "2", "10", "22");
+        auto input = TestType(input_string.begin(), input_string.end());
         
-        auto [result_it, parsing_result] =
-            parser.parse(input_string.begin(), input_string.end());
-        auto actual = std::get<1>(parsing_result);
+        auto [it, parsing_result] = parser.parse(input.begin(), input.end());
+        auto actual = std::get<test_type>(parsing_result);
         
-        REQUIRE(result_it == input_string.end());
-        REQUIRE(actual.val == std::stoi(basic_input));
+        REQUIRE(it == input.end());
+        REQUIRE(actual.val == std::stoi(input_string));
     }
 }

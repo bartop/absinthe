@@ -22,7 +22,12 @@ public:
             begin, end);
 
         if (parsed_it != m_parsed_string.end())
-            return {begin, "failed to parse string"};
+        {
+            return {
+                begin,
+                parser_error{ "String literal parsing error - did not match string" }
+            };
+        }
 
         return {input_it, std::tuple<>{}};
     }

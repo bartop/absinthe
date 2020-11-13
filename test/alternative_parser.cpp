@@ -50,7 +50,8 @@ TEMPLATE_TEST_CASE(
 
     SECTION("parsing fails when input string is not fitting parser")
     {
-        auto basic_input = GENERATE(as<std::string>{}, "stuff", "aa", "int-p");
+        using absinthe::parser_error;
+        auto basic_input = GENERATE(as<std::string>{}, "", "stuff", "aa", "int-p");
         auto parser_input = TestType(basic_input.begin(), basic_input.end());
         auto [result, parsed] = parse(
             parser_input.begin(),
@@ -59,22 +60,7 @@ TEMPLATE_TEST_CASE(
         );
 
         REQUIRE(result == parser_input.begin());
-        auto error = std::get_if<std::string>(&parsed);
-        REQUIRE(error != nullptr);
-    }
-
-    SECTION("parsing fails when input string is empty")
-    {
-        std::string basic_input;
-        auto parser_input = TestType(basic_input.begin(), basic_input.end());
-        auto [result, parsed] = parse(
-            parser_input.begin(),
-            parser_input.end(),
-            alternative_parser
-        );
-
-        REQUIRE(result == parser_input.begin());
-        auto error = std::get_if<std::string>(&parsed);
+        auto error = std::get_if<parser_error>(&parsed);
         REQUIRE(error != nullptr);
     }
 }

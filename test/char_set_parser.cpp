@@ -16,8 +16,8 @@ TEMPLATE_TEST_CASE(
 
     SECTION("parser processes matching input")
     {
-        auto input_str =
-            std::string{GENERATE("a", "b", "c", "asz", "bz", "ctrg")};
+        auto input_str = 
+            GENERATE(as<std::string>{}, "a", "b", "c", "asz", "bz", "ctrg");
         auto input = TestType(input_str.begin(), input_str.end());
         auto [it, result] = absinthe::parse(input, parser);
         REQUIRE(it == std::next(input.begin()));
@@ -27,10 +27,12 @@ TEMPLATE_TEST_CASE(
 
     SECTION("parser does not process matching input")
     {
-        auto input_str = std::string{GENERATE("f", "d", "e", "")};
+        using absinthe::parser_error;
+        auto input_str =
+            GENERATE(as<std::string>{}, "f", "d", "e", "");
         auto input = TestType(input_str.begin(), input_str.end());
         auto [it, result] = absinthe::parse(input, parser);
         REQUIRE(it == input.begin());
-        REQUIRE(std::get_if<std::string>(&result) != nullptr);
+        REQUIRE(std::get_if<parser_error>(&result) != nullptr);
     }
 }

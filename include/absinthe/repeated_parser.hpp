@@ -28,23 +28,30 @@ public:
     {
         result_t result;
         auto result_it = begin;
-        parser_variant_t<Parser> parsed;
 
         for (int i = 0; !max_reached(i); ++i)
         {
-            std::tie(result_it, parsed) = m_parser.parse(result_it, end);
+            auto [it, parsed] = m_parser.parse(result_it, end);
+            result_it = it;
             auto success_value = std::get_if<1>(&parsed);
             if (!success_value)
             {
-                if (i < m_min_times)
-                    return {begin, "repeated parser failed - too few matches"};
+                if (i < m_min_times) 
+                {
+                    return {
+                        begin,
+                        parser_error{ "Repeated parser failed - too few matches" }
+                    };
+                }
                 else
-                    return {result_it, result};
+                {
+                    return { result_it, result };
+                }
             }
 
             result.push_back(std::move(*success_value));
         }
-        return {result_it, result};
+        return { result_it, result };
     }
 
 private:

@@ -30,14 +30,24 @@ public:
         (void) unused;
         auto parse_error = std::get_if<0>(&result);
         if (!parse_error)
-            return {begin, "difference parser failed"};
+        {
+            return {
+                begin,
+                parser_error{ "Difference parser error - matched the second part." }
+            };
+        }
 
         auto [result_it, second_result_variant] = m_left_parser.parse(begin, end);
         auto second_result = std::get_if<1>(&second_result_variant);
         if (!second_result) 
-            return {begin, "error"};
+        {
+            return {
+                begin,
+                parser_error{ "Difference parser error - did not match the first part." }
+            };
+        }
 
-        return {result_it, *second_result};
+        return { result_it, *second_result };
     }
 
 private:

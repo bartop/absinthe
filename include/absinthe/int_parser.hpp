@@ -16,7 +16,7 @@ class int_
     template<class It>
     parse_result<It, unsigned int> parse_unsigned(It begin, It end) const
     {
-        return uint_().parse(begin, end);
+        return uint_{}.parse(begin, end);
     }
 
     template<class It>
@@ -35,7 +35,7 @@ public:
     parse_result<It, int> parse(It begin, It end) const
     {
         if (begin == end)
-            return {begin, "error"};
+            return { begin, parser_error{"error parsing int - empty parsed range"} };
 
         int sign = parse_sign(begin);
 
@@ -44,7 +44,7 @@ public:
         if (uint_result)
             return { it, static_cast<int>(*uint_result * sign) };
         else
-            return { begin, "error" };
+            return { begin, parser_error{"error parsing int - empty parsed range"} };
     }
 };
 

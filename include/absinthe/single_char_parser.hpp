@@ -18,7 +18,7 @@ public:
     parse_result<It, char> parse(It begin, It end) const
     {
         if (begin == end || *begin != m_parsed_char)
-            return { begin, "error" };
+            return { begin, parser_error{"error"} };
 
         return { ++begin, m_parsed_char };
     }

@@ -17,7 +17,12 @@ public:
     parse_result<It, char> parse(It begin, It end) const
     {
         if (begin == end)
-            return { begin, "single_char received empty range to parse" };
+        {
+            return {
+                begin,
+                parser_error{ "Char set parsing error - received empty range" }
+            };
+        }
 
         auto found = std::find(
             m_parsed_set.begin(),
@@ -25,7 +30,14 @@ public:
             *begin
         );
         if (found == m_parsed_set.end())
-            return { begin, "single_char - did not find any of chars in parsed" };
+        {
+            return {
+                begin,
+                parser_error{
+                    "Char set parsing error - did not find any of chars in parsed range" 
+                }
+            };
+        }
 
         return { ++begin, *found };
     }

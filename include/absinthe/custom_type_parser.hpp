@@ -35,20 +35,9 @@ public:
         auto [result_it, result_variant] = m_parser.parse(begin, end);
         auto result = std::get_if<1>(&result_variant);
         if (!result)
-            return {
-                begin,
-                std::variant<std::string, result_t>(
-                    std::in_place_index<0>,
-                    "error"
-                )
-            };
-        return {
-            result_it,
-            std::variant<std::string, result_t>(
-                std::in_place_index<1>,
-                m_function(*result)
-            )
-        };
+            return { begin, std::get<parser_error>(result_variant) };
+
+        return { result_it, m_function(*result) };
     }
 
 private:

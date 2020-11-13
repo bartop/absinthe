@@ -29,23 +29,13 @@ TEMPLATE_TEST_CASE(
 
     SECTION("parsing fails when input string does not match a number")
     {
-        std::string input = "bac3.12";
+        using absinthe::parser_error;
+        auto input = GENERATE(as<std::string>{}, "bac3.12", "");
         auto parseme = TestType(input.begin(), input.end());
         auto [result, parsed] = absinthe::parse(parseme, double_parser);
         REQUIRE(result == parseme.begin());
 
-		auto error = std::get_if<std::string>(&parsed);
-		REQUIRE(error != nullptr);
-    }
-
-    SECTION("parsing fails when input string is empty")
-    {
-        std::string input;
-        auto parseme = TestType(input.begin(), input.end());
-        auto [result, parsed] = absinthe::parse(parseme, double_parser);
-        REQUIRE(result == parseme.begin());
-
-		auto error = std::get_if<std::string>(&parsed);
+		auto error = std::get_if<parser_error>(&parsed);
 		REQUIRE(error != nullptr);
     }
 }

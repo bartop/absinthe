@@ -12,42 +12,26 @@ TEMPLATE_TEST_CASE(
     "[parser][string]",
     std::string, std::vector<char>, std::list<char>)
 {
-	auto string_parser = absinthe::string_("abc");
+    using absinthe::parser_error;
+    auto pattern = std::string{"abc"};
+	auto string_parser = absinthe::string_(pattern);
 
 	SECTION("parser matches input string")
 	{
-		std::string parseme = "abc";
+		auto parseme = std::string{GENERATE("abc", "abcccdsds")};
         auto to_parse = TestType(parseme.begin(), parseme.end());
-		auto [result, parsed] = absinthe::parse(to_parse, string_parser);
-		REQUIRE(result == to_parse.end());
+		auto [it, parsed] = parse(to_parse, string_parser);
+		REQUIRE(it == std::next(to_parse.begin(), pattern.size()));
 		REQUIRE(std::get<1>(parsed) == std::tuple<>{});
 	}
 	
 	SECTION("parser does not match input string")
 	{
-		std::string parseme = "bac";
+		auto parseme = std::string{GENERATE("bac", "")};
         auto to_parse = TestType(parseme.begin(), parseme.end());
-		auto [result, parsed] = absinthe::parse(to_parse, string_parser);
-		REQUIRE(result == to_parse.begin());
-		REQUIRE(std::get<0>(parsed) == "failed to parse string");
+		auto [it, parsed] = parse(to_parse, string_parser);
+		REQUIRE(it == to_parse.begin());
+		REQUIRE(std::get<parser_error>(parsed).message() ==
+            "String literal parsing error - did not match string");
 	}
-
-	SECTION("parser fails to parse empty input string")
-	{
-		std::string parseme;
-        auto to_parse = TestType(parseme.begin(), parseme.end());
-		auto [result, parsed] = absinthe::parse(to_parse, string_parser);
-		REQUIRE(result == to_parse.begin());
-		REQUIRE(std::get<0>(parsed) == "failed to parse string");
-	}
-
-	SECTION("longer input string sucessfully matches")
-	{
-		std::string parseme = "abcccdsds";
-        auto to_parse = TestType(parseme.begin(), parseme.end());
-		auto [result, parsed] = absinthe::parse(to_parse, string_parser);
-		REQUIRE(result != to_parse.begin());
-		REQUIRE(result != to_parse.end());
-		REQUIRE(std::get<1>(parsed) == std::tuple<>{});
-	}	
 }

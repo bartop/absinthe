@@ -26,7 +26,12 @@ public:
         }
 
         if (it == begin)
-            return { begin, "Error while parsing uint - parsed range is empty" };
+        {
+            return {
+                begin,
+                parser_error{ "Error while parsing uint - parsed range is empty" }
+            };
+        }
 
         return { it, result };
     }

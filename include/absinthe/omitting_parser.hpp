@@ -25,7 +25,7 @@ public:
         if (std::get_if<1>(&result_variant))
             return {result_it, std::tuple<>{}};
         else
-            return {begin, "Omitt parser failed"};
+            return {begin, std::get<parser_error>(result_variant)};
     }
 
 private:
