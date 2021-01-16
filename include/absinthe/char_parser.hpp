@@ -2,6 +2,7 @@
 
 #include "single_char_parser.hpp"
 #include "char_set_parser.hpp"
+#include "specific_char_parsers.hpp"
 
 namespace absinthe
 {

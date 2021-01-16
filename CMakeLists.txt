@@ -45,6 +45,7 @@ set(TEST_SOURCES
     test/optional_parser.cpp
     test/char_set_parser.cpp
     test/parse.cpp
+    test/specific_char_parsers.cpp
 )
 
 set(CATCH_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/catch)
