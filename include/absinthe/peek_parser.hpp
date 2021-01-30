@@ -25,7 +25,7 @@ public:
     {
         auto [result_it, result_variant] = m_parser.parse(begin, end);
         (void) result_it;
-        return {begin, result_variant};
+        return { begin, std::move(result_variant) };
     }
 
 private:

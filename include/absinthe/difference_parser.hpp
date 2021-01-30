@@ -47,7 +47,7 @@ public:
             };
         }
 
-        return { result_it, *second_result };
+        return { result_it, std::move(*second_result) };
     }
 
 private:

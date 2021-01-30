@@ -37,7 +37,7 @@ public:
         if (!result)
             return { begin, std::get<parser_error>(result_variant) };
 
-        return { result_it, m_function(*result) };
+        return { result_it, m_function(std::move(*result)) };
     }
 
 private:

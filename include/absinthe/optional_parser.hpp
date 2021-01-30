@@ -26,7 +26,7 @@ public:
         auto [it, result_variant] = m_parser.parse(begin, end);
         auto result = std::get_if<1>(&result_variant);
         if (result)
-            return { it, *result };
+            return { it, std::move(*result) };
         else
             return { begin, std::nullopt };
     }

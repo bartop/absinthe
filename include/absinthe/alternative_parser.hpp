@@ -37,12 +37,12 @@ public:
         auto [first_it, first_result_variant] = m_left_parser.parse(begin, end);
         auto first_result = std::get_if<1>(&first_result_variant);
         if (first_result) 
-            return { first_it, *first_result };
+            return { first_it, std::move(*first_result) };
 
         auto [second_it, second_result_variant] = m_right_parser.parse(first_it, end);
         auto second_result = std::get_if<1>(&second_result_variant);
         if (second_result) 
-            return { second_it, *second_result };
+            return { second_it, std::move(*second_result) };
 
         return {
             begin,
