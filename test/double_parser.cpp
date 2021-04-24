@@ -1,4 +1,4 @@
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 #include <absinthe/double_parser.hpp>
 #include <absinthe/parse.hpp>

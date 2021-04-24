@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.1.3)
 
 project(absinthe)
 
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
+
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     message(SEND_ERROR "In-source builds are not allowed.")
 endif()
@@ -48,14 +51,12 @@ set(TEST_SOURCES
     test/specific_char_parsers.cpp
 )
 
-set(CATCH_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/catch)
-add_library(Catch INTERFACE)
-target_include_directories(Catch INTERFACE ${CATCH_INCLUDE_DIR})
-
 include_directories(${PROJECT_NAME} INTERFACE "${CMAKE_SOURCE_DIR}/include")
 include_directories(${CATCH_INCLUDE_DIR})
 
 enable_testing()
 add_executable(unit_tests ${TEST_SOURCES} test/main.cpp)
-target_link_libraries(unit_tests Catch)
-add_test(unit_tests unit_tests)
+target_include_directories(unit_tests PRIVATE ${CONAN_INCLUDE_DIRS_CATCH2})
+
+target_link_libraries(unit_tests CONAN_PKG::catch2)
+add_test(NAME unit_tests COMMAND unit_tests)

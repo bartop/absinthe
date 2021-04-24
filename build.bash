@@ -6,6 +6,7 @@ if [ ! -d .build ]
 then
     mkdir -p .build
     cd .build
+    conan install ..
     cmake ..
     cd ..
 fi
