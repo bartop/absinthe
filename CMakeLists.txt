@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.1.3)
 
-project(absinthe)
+project(absinthe VERSION 0.1.0 LANGUAGES CXX) 
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+include(${PROJECT_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
-if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+if("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
     message(SEND_ERROR "In-source builds are not allowed.")
 endif()
 
@@ -32,6 +32,35 @@ set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 17)
 
+add_library(absinthe INTERFACE)
+target_include_directories(
+    absinthe INTERFACE
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include/absinthe>
+)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${PROJECT_BINARY_DIR}/absintheConfigVersion.cmake"
+    COMPATIBILITY SameMajorVersion
+)
+
+configure_package_config_file(
+    "${PROJECT_SOURCE_DIR}/absintheConfig.cmake.in"
+    "${PROJECT_BINARY_DIR}/absintheConfig.cmake"
+    INSTALL_DESTINATION lib/cmake/absinthe
+)
+
+install(TARGETS absinthe EXPORT absintheTargets)
+
+install(EXPORT absintheTargets DESTINATION lib/cmake/absinthe)
+install(FILES
+    "${PROJECT_BINARY_DIR}/absintheConfig.cmake"
+    "${PROJECT_BINARY_DIR}/absintheConfigVersion.cmake"
+    DESTINATION lib/cmake/absinthe
+)
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/absinthe" DESTINATION include/absinthe)
+
 set(TEST_SOURCES
     test/single_char_parser.cpp
     test/string_parser.cpp
@@ -51,12 +80,9 @@ set(TEST_SOURCES
     test/specific_char_parsers.cpp
 )
 
-include_directories(${PROJECT_NAME} INTERFACE "${CMAKE_SOURCE_DIR}/include")
-include_directories(${CATCH_INCLUDE_DIR})
-
 enable_testing()
 add_executable(unit_tests ${TEST_SOURCES} test/main.cpp)
-target_include_directories(unit_tests PRIVATE ${CONAN_INCLUDE_DIRS_CATCH2})
 
-target_link_libraries(unit_tests CONAN_PKG::catch2)
+target_link_libraries(unit_tests PRIVATE absinthe)
+target_link_libraries(unit_tests PRIVATE CONAN_PKG::catch2)
 add_test(NAME unit_tests COMMAND unit_tests)
