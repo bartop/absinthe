@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.1.3)
 
 project(absinthe VERSION 0.1.0 LANGUAGES CXX) 
 
-include(${PROJECT_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(TARGETS)
+find_package(Catch2 REQUIRED)
 
 if("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
     message(SEND_ERROR "In-source builds are not allowed.")
@@ -83,6 +82,6 @@ set(TEST_SOURCES
 enable_testing()
 add_executable(unit_tests ${TEST_SOURCES} test/main.cpp)
 
-target_link_libraries(unit_tests PRIVATE absinthe)
-target_link_libraries(unit_tests PRIVATE CONAN_PKG::catch2)
+target_link_libraries(unit_tests PRIVATE absinthe Catch2::Catch2)
 add_test(NAME unit_tests COMMAND unit_tests)
+include(CPack)

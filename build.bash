@@ -2,16 +2,8 @@
 
 set -e
 
-if [ ! -d .build ]
-then
-    mkdir -p .build
-    cd .build
-    conan install ..
-    cmake ..
-    cd ..
-fi
+conan install -if .module-path .
+cmake -S . -B .build -DCMAKE_MODULE_PATH=.module-path
 
-cd .build
-
-make
-make test
+make all -C .build -j8
+make test -C .build -j8

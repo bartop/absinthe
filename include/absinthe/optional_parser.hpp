@@ -7,6 +7,7 @@
 #include <variant>
 #include <utility>
 #include <algorithm>
+#include <optional>
 
 namespace absinthe
 {
