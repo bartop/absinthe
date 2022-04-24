@@ -22,7 +22,7 @@ jobs:
           command: "sudo apt install python3"
       - run:
           name: "Get conan"
-          command: "sudo pip install conan"
+          command: "sudo python3 -m pip install conan"
       - run:
           name: "Build absinthe"
           command: "./build.bash"
