@@ -16,13 +16,13 @@ jobs:
       - checkout
       - run:
           name: "Get CMake"
-          command: "apt install cmake"
+          command: "sudo apt install cmake"
       - run:
           name: "Get Python3"
-          command: "apt install python3"
+          command: "sudo apt install python3"
       - run:
           name: "Get conan"
-          command: "pip install conan"
+          command: "sudo pip install conan"
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
