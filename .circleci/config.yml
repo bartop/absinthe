@@ -15,6 +15,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "Setup apt"
+          command: |
+            sudo add-apt-repository universe
+            sudo apt-get update
+      - run:
           name: "Get CMake"
           command: "sudo apt install cmake"
       - run:
