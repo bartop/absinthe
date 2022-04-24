@@ -5,7 +5,7 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
+  build:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -15,19 +15,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Setup apt"
+          name: "Get build dependencies"
           command: |
             sudo add-apt-repository universe
-            sudo apt-get update
-      - run:
-          name: "Get CMake"
-          command: "sudo apt install cmake"
-      - run:
-          name: "Get Python3"
-          command: "sudo apt install python3 python3-pip"
-      - run:
-          name: "Get conan"
-          command: "sudo python3 -m pip install conan"
+            sudo apt update
+            sudo apt install cmake python3 python3-pip
+            sudo python3 -m pip install conan
       - run:
           name: "Build absinthe"
           command: "./build.bash"
@@ -37,4 +30,4 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
+      - build
