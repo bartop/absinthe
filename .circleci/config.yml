@@ -19,7 +19,7 @@ jobs:
           command: "sudo apt install cmake"
       - run:
           name: "Get Python3"
-          command: "sudo apt install python3"
+          command: "sudo apt install python3 python3-pip"
       - run:
           name: "Get conan"
           command: "sudo pip3 install conan"
