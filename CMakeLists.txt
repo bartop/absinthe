@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23.0)
+cmake_minimum_required(VERSION 3.1.3)
 
 project(absinthe VERSION 0.1.0 LANGUAGES CXX) 
 
@@ -17,13 +17,12 @@ if(CMAKE_COMPILER_IS_GNUCC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnull-dereference -Wduplicated-cond")
     endif()
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "7" OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "7")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wduplicated-branches")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wduplicated-branches" )
     endif()
 
     set(
         CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wlogical-op -Wold-style-cast -Wuseless-cast -Wshadow -pedantic-errors -Werror")
 endif(CMAKE_COMPILER_IS_GNUCC)
-
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
 endif(MSVC)
@@ -34,38 +33,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_library(absinthe INTERFACE)
 target_include_directories(
-    absinthe
-    INTERFACE
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include/absinthe>
-)
-
-set(INCLUDE_FILES
-    absinthe.hpp alternative_parser.hpp char_parser.hpp char_set_parser.hpp
-    custom_type_parser.hpp difference_parser.hpp double_parser.hpp
-    int_parser.hpp omitting_parser.hpp optional_parser.hpp parse.hpp
-    parser_error.hpp parse_result.hpp peek_parser.hpp repeated_parser.hpp
-    sequence_parser.hpp single_char_parser.hpp specific_char_parsers.hpp
-    string_parser.hpp traits.hpp uint_parser.hpp
-)
-
-set(INCLUDE_PATHS "")
-
-foreach(FILE_NAME ${INCLUDE_FILES})
-    set(INCLUDE_PATHS
-	${INCLUDE_PATHS}
-        "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/absinthe/${FILE_NAME}>"
-        "$<INSTALL_INTERFACE:include/absinthe/absinthe/${FILE_NAME}>"
-    )
-endforeach()
-
-target_sources(
-    absinthe PUBLIC
-    FILE_SET HEADERS TYPE HEADERS
-    BASE_DIRS
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-	$<INSTALL_INTERFACE:include/absinthe>
-    FILES ${INCLUDE_PATHS}
+    absinthe INTERFACE
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include/absinthe>
 )
 
 include(CMakePackageConfigHelpers)
@@ -80,11 +50,7 @@ configure_package_config_file(
     INSTALL_DESTINATION lib/cmake/absinthe
 )
 
-install(TARGETS absinthe
-    EXPORT absintheTargets
-    FILE_SET HEADERS
-    DESTINATION include/absinthe
-)
+install(TARGETS absinthe EXPORT absintheTargets)
 
 install(EXPORT absintheTargets DESTINATION lib/cmake/absinthe)
 install(FILES
@@ -92,6 +58,7 @@ install(FILES
     "${PROJECT_BINARY_DIR}/absintheConfigVersion.cmake"
     DESTINATION lib/cmake/absinthe
 )
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/absinthe" DESTINATION include/absinthe)
 
 set(TEST_SOURCES
     test/single_char_parser.cpp
