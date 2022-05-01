@@ -17,7 +17,18 @@ jobs:
       - run:
           name: "Get build dependencies"
           command: |
+            sudo apt update
+            sudo apt install -y software-properties-common lsb-release
+            sudo apt clean all
+
+            wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+            sudo apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
+            sudo apt update
+            sudo apt install kitware-archive-keyring
+            sudo rm /etc/apt/trusted.gpg.d/kitware.gpg
+
             sudo add-apt-repository universe
+
             sudo apt update
             sudo apt install cmake python3 python3-pip
             sudo python3 -m pip install conan
@@ -28,6 +39,6 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build-and-test:
     jobs:
       - build
